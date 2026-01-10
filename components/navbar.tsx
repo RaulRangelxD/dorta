@@ -8,7 +8,7 @@ const Navbar = () => {
       <div className='flex items-center justify-start gap-6'>
         <Image
           className='rounded   object-cover'
-          src='/logo.jpg'
+          src='/logo.webp'
           width={160}
           height={80}
           alt='profile'
