@@ -63,7 +63,7 @@ export default function RegisterPage() {
                 <input 
                   {...register("fullName")}
                   type="text" 
-                  placeholder="John Doe"
+                  placeholder="Carl Johnson"
                   className={`w-full pl-10 pr-4 py-3 border rounded-lg outline-none transition-all ${
                     errors.fullName ? 'border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
                   }`}
