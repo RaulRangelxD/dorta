@@ -7,6 +7,7 @@ import { Mail, Lock, Facebook, Loader2, Eye, EyeOff, ChevronLeft } from 'lucide-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from 'next/link';
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -27,11 +28,7 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      rememberMe: false,
-    },
+    defaultValues: { email: "", password: "", rememberMe: false },
   });
 
   const onSubmit = async (data: LoginFormValues) => {
@@ -43,28 +40,32 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
+      {/* Navbar */}
       <nav className="w-full bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-10">
         <div className="flex items-center">
-          <Image 
-            src="/LOGO.png" 
-            alt="Dorta Logo" 
-            width={120} 
-            height={40} 
-            className="h-10 w-auto object-contain"
-            priority
-          />
+          <Link href="/">
+            <Image 
+              src="/LOGO.png" 
+              alt="Dorta Logo" 
+              width={120} 
+              height={40} 
+              className="h-10 w-auto object-contain cursor-pointer"
+              priority
+            />
+          </Link>
         </div>
         
         <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-          <a href="/" className="hover:text-blue-600 transition-colors">Home</a>
-          <a href="#" className="hover:text-blue-600 transition-colors">Products</a>
-          <a href="#" className="hover:text-blue-600 transition-colors">Support</a>
-          <button 
-            onClick={() => router.push("/auth/register")}
+          <Link href="/" className="hover:text-blue-600 transition-colors">Home</Link>
+          <Link href="/products" className="hover:text-blue-600 transition-colors">Products</Link>
+          <Link href="/support" className="hover:text-blue-600 transition-colors">Support</Link>
+          {/* RUTA CORREGIDA: Sin el (auth) */}
+          <Link 
+            href="/register" 
             className="bg-[#1d61f2] text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-all shadow-sm"
           >
             Register
-          </button>
+          </Link>
         </div>
       </nav>
 
@@ -80,27 +81,18 @@ export default function LoginPage() {
         <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mt-8 md:mt-0">
           <div className="p-8 pt-12 flex flex-col items-center">
             <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-6">
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-              </svg>
+               <Mail className="w-8 h-8" />
             </div>
 
             <h1 className="text-3xl font-bold tracking-tight">Welcome Back</h1>
-            <p className="text-slate-500 mt-2 mb-10 text-center text-sm font-medium">Sign in to your account to manage your orders</p>
+            <p className="text-slate-500 mt-2 mb-10 text-center text-sm font-medium">Sign in to your account</p>
 
             <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700">Email Address</label>
                 <div className="relative">
                   <Mail className={`absolute left-3 top-3.5 w-5 h-5 ${errors.email ? 'text-red-400' : 'text-slate-400'}`} />
-                  <input 
-                    {...register("email")}
-                    type="email" 
-                    placeholder="name@company.com"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg outline-none transition-all ${
-                      errors.email ? 'border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
-                    }`}
-                  />
+                  <input {...register("email")} type="email" placeholder="name@company.com" className={`w-full pl-10 pr-4 py-3 border rounded-lg outline-none transition-all ${errors.email ? 'border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'}`} />
                 </div>
                 {errors.email && <p className="text-red-500 text-xs font-medium">{errors.email.message}</p>}
               </div>
@@ -110,69 +102,58 @@ export default function LoginPage() {
                 <div className="relative">
                   <Lock className={`absolute left-3 top-3.5 w-5 h-5 ${errors.password ? 'text-red-400' : 'text-slate-400'}`} />
                   <input 
-                    {...register("password")}
+                    {...register("password")} 
                     type={showPassword ? "text" : "password"} 
-                    placeholder="••••••••"
-                    className={`w-full pl-10 pr-12 py-3 border rounded-lg outline-none transition-all ${
-                      errors.password ? 'border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
-                    }`}
+                    placeholder="••••••••" 
+                    className={`w-full pl-10 pr-12 py-3 border rounded-lg outline-none transition-all ${errors.password ? 'border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'}`} 
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3.5 text-slate-400 hover:text-slate-600 transition-colors"
+                  <button 
+                    type="button" 
+                    onClick={() => setShowPassword(!showPassword)} 
+                    className="absolute right-3 top-3.5 text-slate-400 hover:text-slate-600"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
-                {errors.password && <p className="text-red-500 text-xs font-medium">{errors.password.message}</p>}
               </div>
 
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center text-slate-600 cursor-pointer select-none font-semibold">
-                  <input {...register("rememberMe")} type="checkbox" className="mr-2 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
+              <div className="flex items-center justify-between text-sm font-semibold">
+                <label className="flex items-center text-slate-600 cursor-pointer">
+                  <input {...register("rememberMe")} type="checkbox" className="mr-2 h-4 w-4 text-blue-600 rounded border-slate-300" />
                   Remember me
                 </label>
-                <a href="#" className="text-blue-600 font-bold hover:text-blue-700">Forgot password?</a>
+                <Link href="/forgot-password" size="sm" className="text-blue-600 hover:text-blue-700">Forgot password?</Link>
               </div>
 
-              <button 
-                disabled={isLoading}
-                type="submit"
-                className="w-full bg-[#1d61f2] hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg transition-all shadow-lg shadow-blue-100 active:scale-[0.98] disabled:opacity-70 flex justify-center items-center text-base"
-              >
+              <button disabled={isLoading} type="submit" className="w-full bg-[#1d61f2] hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg flex justify-center items-center transition-all shadow-md">
                 {isLoading ? <Loader2 className="animate-spin h-5 w-5" /> : "Log In"}
               </button>
             </form>
 
-            <div className="relative w-full my-8">
-              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-200"></div></div>
-              <div className="relative flex justify-center text-[10px] uppercase tracking-widest">
-                <span className="bg-white px-3 text-slate-400 font-bold">Or continue with</span>
-              </div>
+            {/* Divisor */}
+            <div className="relative w-full my-8 text-center border-b border-slate-200 leading-[0.1em]">
+               <span className="bg-white px-3 text-slate-400 text-[10px] font-bold uppercase tracking-widest">Or continue with</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 w-full">
-              <button type="button" className="flex items-center justify-center gap-2 border border-slate-300 py-3 rounded-lg hover:bg-slate-50 transition-colors font-bold text-slate-700 text-sm">
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="" />
-                Google
+            <div className="grid grid-cols-2 gap-4 w-full text-sm font-bold">
+              <button className="flex items-center justify-center gap-2 border border-slate-300 py-3 rounded-lg hover:bg-slate-50 transition-colors">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="" /> Google
               </button>
-              <button type="button" className="flex items-center justify-center gap-2 border border-slate-300 py-3 rounded-lg hover:bg-slate-50 transition-colors font-bold text-slate-700 text-sm">
-                <Facebook className="w-5 h-5 text-[#1877f2] fill-[#1877f2]" />
-                Facebook
+              <button className="flex items-center justify-center gap-2 border border-slate-300 py-3 rounded-lg hover:bg-slate-50 transition-colors">
+                <Facebook className="w-5 h-5 text-[#1877f2] fill-[#1877f2]" /> Facebook
               </button>
             </div>
           </div>
 
           <div className="bg-slate-50 p-6 border-t border-slate-200 text-center">
             <p className="text-sm text-slate-600 font-medium">
-              Don't have an account? <button onClick={() => router.push("/auth/register")} className="text-blue-600 font-bold hover:underline">Register for a new account</button>
+              Don't have an account? <Link href="/register" className="text-blue-600 font-bold hover:underline">Register for a new account</Link>
             </p>
           </div>
         </div>
         
-        <footer className="mt-12 text-slate-400 text-[11px] text-center max-w-xs leading-relaxed uppercase tracking-tighter">
-          © 2026 Alejandra & Alejandro.
+        <footer className="mt-12 text-slate-400 text-[11px] text-center uppercase tracking-tighter">
+          © 2026 Raul & Alejandra.
         </footer>
       </main>
     </div>
