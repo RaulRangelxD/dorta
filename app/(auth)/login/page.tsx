@@ -172,7 +172,7 @@ export default function LoginPage() {
         </div>
         
         <footer className="mt-12 text-slate-400 text-[11px] text-center max-w-xs leading-relaxed uppercase tracking-tighter">
-          © 2026 Alejandra & Alejandro. All appliance parts available. Professional Grade.
+          © 2026 Alejandra & Alejandro.
         </footer>
       </main>
     </div>
