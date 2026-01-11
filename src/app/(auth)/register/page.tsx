@@ -42,11 +42,28 @@ export default function RegisterPage() {
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log(data);
+  setIsLoading(true);
+  
+  try {
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data), // Enviamos los datos del formulario a la API
+    });
+
+    if (response.ok) {
+      alert("Registro exitoso en la API");
+      router.push("/login");
+    } else {
+      const errorData = await response.json();
+      alert("Error: " + errorData.message);
+    }
+  } catch (error) {
+    alert("Error de conexión");
+  } finally {
     setIsLoading(false);
-  };
+  }
+};
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
