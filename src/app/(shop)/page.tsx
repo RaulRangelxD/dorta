@@ -1,6 +1,6 @@
 'use client'
 
-import { ProductCard } from '@/src/components/cards/ProductCard/ProductCard'
+import { ProductCard } from '@/components/cards/ProductCard/ProductCard'
 
 export default function Home() {
   return (
