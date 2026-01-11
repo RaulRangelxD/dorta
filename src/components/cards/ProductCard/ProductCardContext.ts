@@ -1,4 +1,4 @@
-import { Product } from '@/src/utils/types'
+import { Product } from '@/utils/types'
 import { createContext, useContext } from 'react'
 
 export const ProductCardContext = createContext<{ product: Product } | null>(null)
