@@ -4,13 +4,13 @@ import React, { ReactNode } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Product } from '@/utils/types'
+import { Product } from '@/src/utils/types'
 import { Edit, ShoppingCart, Trash2 } from 'lucide-react'
-import { postCart } from '@/api/cart'
+import { postCart } from '@/src/api/cart'
 import {
   ProductCardContext,
   useProductCardContext,
-} from '@/components/cards/ProductCard/ProductCardContext'
+} from '@/src/components/cards/ProductCard/ProductCardContext'
 
 type ProductCardProps = {
   product: Product
