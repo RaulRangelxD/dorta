@@ -1,33 +1,60 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { ProductCard } from '@/components/cards/ProductCard/ProductCard'
+import type { Product } from '@/utils/types'
 
 export default function Home() {
-  return (
-    <div className='flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black'>
-      <h2>HOME</h2>
-      <ProductCard
-        product={{
-          id: 1,
-          name: 'Tornillo',
-          description: 'a',
-          price: 20,
-          reference: 'a',
-          categoryId: 1,
-          stock: 1,
-          category: { id: 1, name: 'name' },
-          img: 'a',
-          createdAt: 'a',
-          updatedAt: 'a',
-        }}
-        info={
-          <ProductCard.Info>
-            <ProductCard.Name />
-            <ProductCard.Price />
-          </ProductCard.Info>
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch('/api/products')
+
+        if (!res.ok) {
+          throw new Error('Failed to fetch products')
         }
-        action={<ProductCard.Action />}
-      />
+
+        const data = await res.json()
+        setProducts(data)
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className='flex min-h-screen items-center justify-center'>
+        <p>Cargando productos...</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className='min-h-screen bg-zinc-50 dark:bg-black p-8'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            image={<ProductCard.Image />}
+            info={
+              <ProductCard.Info>
+                <ProductCard.Name />
+                <ProductCard.Price />
+              </ProductCard.Info>
+            }
+            action={<ProductCard.Action />}
+          />
+        ))}
+      </div>
     </div>
   )
 }

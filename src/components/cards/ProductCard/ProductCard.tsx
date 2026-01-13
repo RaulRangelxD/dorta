@@ -32,7 +32,7 @@ export const ProductCard = ({
       <div
         className={`${
           size ? size : 'w-full'
-        } max-w-xs rounded-xl border bg-gray-500/15 border-gray-500/30 shadow-sm overflow-hidden group`}
+        } rounded border bg-gray-500/15 border-gray-500/30 shadow-sm overflow-hidden group`}
       >
         {image}
         <div className='p-4'>
@@ -46,16 +46,19 @@ export const ProductCard = ({
 
 const ProductImage = () => {
   const { product } = useProductCardContext()
-  const imageUrl = product.img
-    ? `${process.env.NEXT_PUBLIC_API_URL}${product.img}`
-    : '/fallback-image.png'
+
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL
+
+  const imageUrl =
+    product.img && baseUrl ? `${baseUrl}${product.img}` : '/placeholder.webp'
 
   return (
     <div className='relative w-full h-64 overflow-hidden'>
       <Image
         src={imageUrl}
         alt={product.name}
-        className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
+        fill
+        className='object-cover transition-transform duration-300 group-hover:scale-105'
       />
     </div>
   )
@@ -63,12 +66,12 @@ const ProductImage = () => {
 
 const ProductName = () => {
   const { product } = useProductCardContext()
-  return <h3 className={`text-lg font-medium mb-1 `}>{product.name}</h3>
+  return <h3 className={`text-sm font-medium mb-1 `}>{product.name}</h3>
 }
 
 const ProductPrice = () => {
   const { product } = useProductCardContext()
-  return <p className={`text-xl font-bold mb-3 `}>${product.price}</p>
+  return <p className={`text-md font-bold mb-3 `}>${product.price}</p>
 }
 
 const ProductInfo = ({ children }: { children: ReactNode }) => {
@@ -97,9 +100,9 @@ const ProductAction = () => {
   return (
     <button
       onClick={addToCart}
-      className='flex gap-2 w-full justify-center items-center bg-blue-700 py-2 rounded-lg font-medium hover:bg-blue-800 transition-colors'
+      className='flex gap-2 w-full justify-center items-center bg-blue-700 py-1 rounded font-medium hover:bg-blue-800 transition-colors'
     >
-      <ShoppingCart className='w-6 h-6' />
+      <ShoppingCart className='w-4 h-4' />
       <span>Add to cart</span>
     </button>
   )
@@ -113,7 +116,7 @@ const ProductAdminAction = () => {
     <div className='flex gap-2 mt-4'>
       <button
         onClick={() => router.push(`/admin/edit/${product.id}`)}
-        className='p-2 border rounded-md hover:bg-gray-100 transition-colors'
+        className='p-2 border rounded hover:bg-gray-100 transition-colors'
       >
         <Edit size={18} />
       </button>
@@ -123,7 +126,7 @@ const ProductAdminAction = () => {
             router.push(`/admin/delete/${product.id}`)
           }
         }}
-        className='p-2 border border-red-200 text-red-600 rounded-md hover:bg-red-50 transition-colors'
+        className='p-2 border border-red-200 text-red-600 rounded hover:bg-red-50 transition-colors'
       >
         <Trash2 size={18} />
       </button>
