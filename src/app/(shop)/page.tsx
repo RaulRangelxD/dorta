@@ -8,14 +8,14 @@ export default function Home() {
       <h2>HOME</h2>
       <ProductCard
         product={{
-          _id: 'a',
+          id: 1,
           name: 'Tornillo',
           description: 'a',
-          price: '20',
+          price: 20,
           reference: 'a',
-          categoryId: 'a',
+          categoryId: 1,
           stock: 1,
-          category: 'a',
+          category: { id: 1, name: 'name' },
           img: 'a',
           createdAt: 'a',
           updatedAt: 'a',
@@ -26,9 +26,7 @@ export default function Home() {
             <ProductCard.Price />
           </ProductCard.Info>
         }
-        action={
-          <ProductCard.Action />
-        }
+        action={<ProductCard.Action />}
       />
     </div>
   )
