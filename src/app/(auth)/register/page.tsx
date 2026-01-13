@@ -1,31 +1,42 @@
-"use client";
+'use client'
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Mail, Lock, User, Facebook, Loader2, Eye, EyeOff, ChevronLeft } from 'lucide-react';
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Link from 'next/link'; // Importante para la navegación
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import {
+  Mail,
+  Lock,
+  User,
+  Facebook,
+  Loader2,
+  Eye,
+  EyeOff,
+  ChevronLeft,
+} from 'lucide-react'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import Link from 'next/link'
 
-const registerSchema = z.object({
-  fullName: z.string().min(2, "Full name is required"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  confirmPassword: z.string()
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const registerSchema = z
+  .object({
+    fullName: z.string().min(2, 'Full name is required'),
+    email: z.string().email('Invalid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  })
 
-type RegisterFormValues = z.infer<typeof registerSchema>;
+type RegisterFormValues = z.infer<typeof registerSchema>
 
 export default function RegisterPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const router = useRouter()
 
   const {
     register,
@@ -34,203 +45,302 @@ export default function RegisterPage() {
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      fullName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      fullName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
-  });
+  })
 
   const onSubmit = async (data: RegisterFormValues) => {
-  setIsLoading(true);
-  
-  try {
-    const response = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data), // Enviamos los datos del formulario a la API
-    });
+    setIsLoading(true)
 
-    if (response.ok) {
-      alert("Registro exitoso en la API");
-      router.push("/login");
-    } else {
-      const errorData = await response.json();
-      alert("Error: " + errorData.message);
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data), // Enviamos los datos del formulario a la API
+      })
+
+      if (response.ok) {
+        alert('Registro exitoso en la API')
+        router.push('/login')
+      } else {
+        const errorData = await response.json()
+        alert('Error: ' + errorData.message)
+      }
+    } catch (error) {
+      alert('Error de conexión')
+    } finally {
+      setIsLoading(false)
     }
-  } catch (error) {
-    alert("Error de conexión");
-  } finally {
-    setIsLoading(false);
   }
-};
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
-      <nav className="w-full bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-10">
-        <div className="flex items-center">
-          <Link href="/">
-            <Image 
-              src="/LOGO.png" 
-              alt="Dorta Logo" 
-              width={120} 
-              height={40} 
-              className="h-10 w-auto object-contain cursor-pointer"
+    <div className='min-h-screen bg-slate-50 font-sans text-slate-900'>
+      <nav className='w-full bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-10'>
+        <div className='flex items-center'>
+          <Link href='/'>
+            <Image
+              src='/LOGO.png'
+              alt='Dorta Logo'
+              width={120}
+              height={40}
+              className='h-10 w-auto object-contain cursor-pointer'
               priority
             />
           </Link>
         </div>
-        
-        <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-          <Link href="/" className="hover:text-blue-600 transition-colors">Home</Link>
-          <Link href="/products" className="hover:text-blue-600 transition-colors">Products</Link>
-          <Link href="/support" className="hover:text-blue-600 transition-colors">Support</Link>
+
+        <div className='hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600'>
+          <Link href='/' className='hover:text-blue-600 transition-colors'>
+            Home
+          </Link>
+          <Link
+            href='/products'
+            className='hover:text-blue-600 transition-colors'
+          >
+            Products
+          </Link>
+          <Link
+            href='/support'
+            className='hover:text-blue-600 transition-colors'
+          >
+            Support
+          </Link>
           {/* Corregido: Sin /auth/ porque usas (auth) */}
-          <Link 
-            href="/login" 
-            className="bg-[#1d61f2] text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-all shadow-sm"
+          <Link
+            href='/login'
+            className='bg-[#1d61f2] text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-all shadow-sm'
           >
             Log In
           </Link>
         </div>
       </nav>
 
-      <main className="flex flex-col items-center justify-center p-4 py-12 relative max-w-7xl mx-auto">
-        <button 
+      <main className='flex flex-col items-center justify-center p-4 py-12 relative max-w-7xl mx-auto'>
+        <button
           onClick={() => router.back()}
-          className="mb-8 flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors font-semibold text-sm self-start md:absolute md:left-4 md:top-8"
+          className='mb-8 flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors font-semibold text-sm self-start md:absolute md:left-4 md:top-8'
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className='w-5 h-5' />
           Back
         </button>
 
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mt-8 md:mt-0">
-          <div className="p-8 pt-12 flex flex-col items-center">
-            <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-6">
-              <User className="w-8 h-8" />
+        <div className='w-full max-w-md bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mt-8 md:mt-0'>
+          <div className='p-8 pt-12 flex flex-col items-center'>
+            <div className='w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-6'>
+              <User className='w-8 h-8' />
             </div>
 
-            <h1 className="text-3xl font-bold tracking-tight">Create Account</h1>
-            <p className="text-slate-500 mt-2 mb-10 text-center text-sm font-medium">Join us to manage your orders and more</p>
+            <h1 className='text-3xl font-bold tracking-tight'>
+              Create Account
+            </h1>
+            <p className='text-slate-500 mt-2 mb-10 text-center text-sm font-medium'>
+              Join us to manage your orders and more
+            </p>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5 text-left">
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700">Full Name</label>
-                <div className="relative">
-                  <User className={`absolute left-3 top-3.5 w-5 h-5 ${errors.fullName ? 'text-red-400' : 'text-slate-400'}`} />
-                  <input 
-                    {...register("fullName")}
-                    type="text" 
-                    placeholder="John Doe"
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className='w-full space-y-5 text-left'
+            >
+              <div className='space-y-2'>
+                <label className='text-sm font-bold text-slate-700'>
+                  Full Name
+                </label>
+                <div className='relative'>
+                  <User
+                    className={`absolute left-3 top-3.5 w-5 h-5 ${
+                      errors.fullName ? 'text-red-400' : 'text-slate-400'
+                    }`}
+                  />
+                  <input
+                    {...register('fullName')}
+                    type='text'
+                    placeholder='John Doe'
                     className={`w-full pl-10 pr-4 py-3 border rounded-lg outline-none transition-all ${
-                      errors.fullName ? 'border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
+                      errors.fullName
+                        ? 'border-red-500 focus:ring-2 focus:ring-red-100'
+                        : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
                     }`}
                   />
                 </div>
-                {errors.fullName && <p className="text-red-500 text-xs font-medium">{errors.fullName.message}</p>}
+                {errors.fullName && (
+                  <p className='text-red-500 text-xs font-medium'>
+                    {errors.fullName.message}
+                  </p>
+                )}
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700">Email Address</label>
-                <div className="relative">
-                  <Mail className={`absolute left-3 top-3.5 w-5 h-5 ${errors.email ? 'text-red-400' : 'text-slate-400'}`} />
-                  <input 
-                    {...register("email")}
-                    type="email" 
-                    placeholder="name@company.com"
+              <div className='space-y-2'>
+                <label className='text-sm font-bold text-slate-700'>
+                  Email Address
+                </label>
+                <div className='relative'>
+                  <Mail
+                    className={`absolute left-3 top-3.5 w-5 h-5 ${
+                      errors.email ? 'text-red-400' : 'text-slate-400'
+                    }`}
+                  />
+                  <input
+                    {...register('email')}
+                    type='email'
+                    placeholder='name@company.com'
                     className={`w-full pl-10 pr-4 py-3 border rounded-lg outline-none transition-all ${
-                      errors.email ? 'border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
+                      errors.email
+                        ? 'border-red-500 focus:ring-2 focus:ring-red-100'
+                        : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
                     }`}
                   />
                 </div>
-                {errors.email && <p className="text-red-500 text-xs font-medium">{errors.email.message}</p>}
+                {errors.email && (
+                  <p className='text-red-500 text-xs font-medium'>
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700">Password</label>
-                <div className="relative">
-                  <Lock className={`absolute left-3 top-3.5 w-5 h-5 ${errors.password ? 'text-red-400' : 'text-slate-400'}`} />
-                  <input 
-                    {...register("password")}
-                    type={showPassword ? "text" : "password"} 
-                    placeholder="••••••••"
+              <div className='space-y-2'>
+                <label className='text-sm font-bold text-slate-700'>
+                  Password
+                </label>
+                <div className='relative'>
+                  <Lock
+                    className={`absolute left-3 top-3.5 w-5 h-5 ${
+                      errors.password ? 'text-red-400' : 'text-slate-400'
+                    }`}
+                  />
+                  <input
+                    {...register('password')}
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder='••••••••'
                     className={`w-full pl-10 pr-12 py-3 border rounded-lg outline-none transition-all ${
-                      errors.password ? 'border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
+                      errors.password
+                        ? 'border-red-500 focus:ring-2 focus:ring-red-100'
+                        : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
                     }`}
                   />
                   <button
-                    type="button"
+                    type='button'
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3.5 text-slate-400 hover:text-slate-600 transition-colors"
+                    className='absolute right-3 top-3.5 text-slate-400 hover:text-slate-600 transition-colors'
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? (
+                      <EyeOff className='w-5 h-5' />
+                    ) : (
+                      <Eye className='w-5 h-5' />
+                    )}
                   </button>
                 </div>
-                {errors.password && <p className="text-red-500 text-xs font-medium">{errors.password.message}</p>}
+                {errors.password && (
+                  <p className='text-red-500 text-xs font-medium'>
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700">Confirm Password</label>
-                <div className="relative">
-                  <Lock className={`absolute left-3 top-3.5 w-5 h-5 ${errors.confirmPassword ? 'text-red-400' : 'text-slate-400'}`} />
-                  <input 
-                    {...register("confirmPassword")}
-                    type={showConfirmPassword ? "text" : "password"} 
-                    placeholder="••••••••"
+              <div className='space-y-2'>
+                <label className='text-sm font-bold text-slate-700'>
+                  Confirm Password
+                </label>
+                <div className='relative'>
+                  <Lock
+                    className={`absolute left-3 top-3.5 w-5 h-5 ${
+                      errors.confirmPassword ? 'text-red-400' : 'text-slate-400'
+                    }`}
+                  />
+                  <input
+                    {...register('confirmPassword')}
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    placeholder='••••••••'
                     className={`w-full pl-10 pr-12 py-3 border rounded-lg outline-none transition-all ${
-                      errors.confirmPassword ? 'border-red-500 focus:ring-2 focus:ring-red-100' : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
+                      errors.confirmPassword
+                        ? 'border-red-500 focus:ring-2 focus:ring-red-100'
+                        : 'border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
                     }`}
                   />
                   <button
-                    type="button"
+                    type='button'
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-3.5 text-slate-400 hover:text-slate-600 transition-colors"
+                    className='absolute right-3 top-3.5 text-slate-400 hover:text-slate-600 transition-colors'
                   >
-                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showConfirmPassword ? (
+                      <EyeOff className='w-5 h-5' />
+                    ) : (
+                      <Eye className='w-5 h-5' />
+                    )}
                   </button>
                 </div>
-                {errors.confirmPassword && <p className="text-red-500 text-xs font-medium">{errors.confirmPassword.message}</p>}
+                {errors.confirmPassword && (
+                  <p className='text-red-500 text-xs font-medium'>
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
 
-              <button 
+              <button
                 disabled={isLoading}
-                type="submit"
-                className="w-full bg-[#1d61f2] hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg transition-all shadow-lg shadow-blue-100 active:scale-[0.98] disabled:opacity-70 flex justify-center items-center text-base mt-2"
+                type='submit'
+                className='w-full bg-[#1d61f2] hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg transition-all shadow-lg shadow-blue-100 active:scale-[0.98] disabled:opacity-70 flex justify-center items-center text-base mt-2'
               >
-                {isLoading ? <Loader2 className="animate-spin h-5 w-5" /> : "Create Account"}
+                {isLoading ? (
+                  <Loader2 className='animate-spin h-5 w-5' />
+                ) : (
+                  'Create Account'
+                )}
               </button>
             </form>
 
-            <div className="relative w-full my-8">
-              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-200"></div></div>
-              <div className="relative flex justify-center text-[10px] uppercase tracking-widest bg-white px-3">
-                <span className="text-slate-400 font-bold">Or register with</span>
+            <div className='relative w-full my-8'>
+              <div className='absolute inset-0 flex items-center'>
+                <div className='w-full border-t border-slate-200'></div>
+              </div>
+              <div className='relative flex justify-center text-[10px] uppercase tracking-widest bg-white px-3'>
+                <span className='text-slate-400 font-bold'>
+                  Or register with
+                </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 w-full">
-              <button type="button" className="flex items-center justify-center gap-2 border border-slate-300 py-3 rounded-lg hover:bg-slate-50 transition-colors font-bold text-slate-700 text-sm">
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="" />
+            <div className='grid grid-cols-2 gap-4 w-full'>
+              <button
+                type='button'
+                className='flex items-center justify-center gap-2 border border-slate-300 py-3 rounded-lg hover:bg-slate-50 transition-colors font-bold text-slate-700 text-sm'
+              >
+                <img
+                  src='https://www.svgrepo.com/show/475656/google-color.svg'
+                  className='w-5 h-5'
+                  alt=''
+                />
                 Google
               </button>
-              <button type="button" className="flex items-center justify-center gap-2 border border-slate-300 py-3 rounded-lg hover:bg-slate-50 transition-colors font-bold text-slate-700 text-sm">
-                <Facebook className="w-5 h-5 text-[#1877f2] fill-[#1877f2]" />
+              <button
+                type='button'
+                className='flex items-center justify-center gap-2 border border-slate-300 py-3 rounded-lg hover:bg-slate-50 transition-colors font-bold text-slate-700 text-sm'
+              >
+                <Facebook className='w-5 h-5 text-[#1877f2] fill-[#1877f2]' />
                 Facebook
               </button>
             </div>
           </div>
 
-          <div className="bg-slate-50 p-6 border-t border-slate-200 text-center">
-            <p className="text-sm text-slate-600 font-medium">
-              Already have an account? <Link href="/login" className="text-blue-600 font-bold hover:underline">Log in here</Link>
+          <div className='bg-slate-50 p-6 border-t border-slate-200 text-center'>
+            <p className='text-sm text-slate-600 font-medium'>
+              Already have an account?{' '}
+              <Link
+                href='/login'
+                className='text-blue-600 font-bold hover:underline'
+              >
+                Log in here
+              </Link>
             </p>
           </div>
         </div>
-        
-        <footer className="mt-12 text-slate-400 text-[11px] text-center max-w-xs leading-relaxed uppercase tracking-tighter">
+
+        <footer className='mt-12 text-slate-400 text-[11px] text-center max-w-xs leading-relaxed uppercase tracking-tighter'>
           © 2026 Created by Raul & Alejandra.
         </footer>
       </main>
     </div>
-  );
+  )
 }

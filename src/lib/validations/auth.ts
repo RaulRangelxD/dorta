@@ -11,3 +11,8 @@ export const registerSchema = z
     message: 'Las contraseñas no coinciden',
     path: ['confirmPassword'],
   })
+export const forgotPasswordSchema = z.object({
+  email: z.string().email('Ingresa un correo electrónico válido'),
+})
+
+export type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>
