@@ -112,7 +112,7 @@ const ProductAdminAction = () => {
   return (
     <div className='flex gap-2 mt-4'>
       <button
-        onClick={() => router.push(`/admin/edit/${product._id}`)}
+        onClick={() => router.push(`/admin/edit/${product.id}`)}
         className='p-2 border rounded-md hover:bg-gray-100 transition-colors'
       >
         <Edit size={18} />
@@ -120,7 +120,7 @@ const ProductAdminAction = () => {
       <button
         onClick={() => {
           if (confirm('¿Eliminar producto?')) {
-            router.push(`/admin/delete/${product._id}`)
+            router.push(`/admin/delete/${product.id}`)
           }
         }}
         className='p-2 border border-red-200 text-red-600 rounded-md hover:bg-red-50 transition-colors'

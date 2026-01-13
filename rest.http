@@ -23,3 +23,41 @@ Content-Type: application/json
 ###
 DELETE http://localhost:3000/api/users?id=1
 Content-Type: application/json
+
+##################################################PRODUCTS##################################################
+
+###
+GET http://localhost:3000/api/products
+Content-Type: application/json
+
+###
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+{
+  "name": "Laptop Gamer",
+  "description": "Laptop de alto rendimiento para juegos",
+  "price": 1299.99,
+  "reference": "LAP-GAMER-001",
+  "stock": 10,
+  "img": "/uploads/laptop.jpg",
+  "categoryId": 1
+}
+
+###
+PUT http://localhost:3000/api/products?id=1
+Content-Type: application/json
+
+{
+  "name": "Laptop Gamer Pro",
+  "description": "Versión mejorada con mejor GPU",
+  "price": 1499.99,
+  "reference": "LAP-GAMER-001",
+  "stock": 8,
+  "img": "/uploads/laptop-pro.jpg",
+  "categoryId": 1
+}
+
+###
+DELETE http://localhost:3000/api/products?id=1
+Content-Type: application/json

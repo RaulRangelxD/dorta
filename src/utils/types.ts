@@ -1,13 +1,21 @@
-export interface Product{
-  _id: string
+export interface Product {
+  id: number
+
   name: string
   description: string
-  price: number | string
+  price: number
   reference: string
-  categoryId: string
+
   stock: number
-  category: string
-  img?: string
+
+  img?: string | null
+
+  categoryId: number
+  category: {
+    id: number
+    name: string
+  }
+
   createdAt: string
   updatedAt: string
 }
