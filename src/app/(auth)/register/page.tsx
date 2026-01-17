@@ -53,21 +53,26 @@ export default function RegisterPage() {
 
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true)
+
     try {
-      const response = await fetch('/api/register', {
+      const response = await fetch('/api/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          name: data.fullName, // map correctly
+          email: data.email,
+          password: data.password, // DO NOT send confirmPassword
+        }),
       })
 
-      if (response.ok) {
-        router.push('/login')
-      } else {
-        const errorData = await response.json()
-        alert('Error: ' + errorData.message)
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Registration failed')
       }
+
+      router.push('/login')
     } catch (error) {
-      alert('Connection error')
+      alert(error)
     } finally {
       setIsLoading(false)
     }
