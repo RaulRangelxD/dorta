@@ -12,6 +12,7 @@ model User {
   email     String   @unique
   name      String?
   password  String
+  cart      Cart?
 }
 
 model Category {
@@ -23,15 +24,36 @@ model Category {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   name        String
   description String
   price       Float
-  reference   String   @unique
+  reference   String        @unique
   stock       Int
   img         String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   categoryId  Int
-  category    Category @relation(fields: [categoryId], references: [id])
+  category    Category      @relation(fields: [categoryId], references: [id])
+  cartItems   CartProduct[]
+}
+
+model Cart {
+  id        Int           @id @default(autoincrement())
+  userId    Int?          @unique
+  user      User?         @relation(fields: [userId], references: [id])
+  products  CartProduct[]
+  createdAt DateTime      @default(now())
+}
+
+model CartProduct {
+  id        Int @id @default(autoincrement())
+  cartId    Int
+  productId Int
+  quantity  Int @default(1)
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
 }
