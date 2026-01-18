@@ -59,9 +59,9 @@ export default function RegisterPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: data.fullName, // map correctly
+          name: data.fullName,
           email: data.email,
-          password: data.password, // DO NOT send confirmPassword
+          password: data.password,
         }),
       })
 
@@ -70,9 +70,9 @@ export default function RegisterPage() {
         throw new Error(error.error || 'Registration failed')
       }
 
-      router.push('/login')
-    } catch (error) {
-      alert(error)
+      router.push('/login?registered=success')
+    } catch (error: any) {
+      alert(error.message)
     } finally {
       setIsLoading(false)
     }
@@ -199,8 +199,6 @@ export default function RegisterPage() {
                   </p>
                 )}
               </div>
-
-              {/* Password */}
               <div className='space-y-2'>
                 <label className='text-sm font-bold text-slate-700 dark:text-slate-300'>
                   Password

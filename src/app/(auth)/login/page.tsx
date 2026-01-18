@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Mail, Lock, Loader2, Eye, EyeOff, ChevronLeft } from 'lucide-react'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -20,7 +20,15 @@ type LoginFormValues = z.infer<typeof loginSchema>
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [registeredSuccess, setRegisteredSuccess] = useState(false)
   const router = useRouter()
+  const params = useSearchParams()
+
+  useEffect(() => {
+    if (params?.get('registered') === 'success') {
+      setRegisteredSuccess(true)
+    }
+  }, [params])
 
   const {
     register,
@@ -33,9 +41,28 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    console.log(data)
-    setIsLoading(false)
+
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Login failed')
+      }
+
+      const resData = await response.json()
+      document.cookie = `token=${resData.token}; path=/; max-age=86400; secure; samesite=strict`
+
+      router.push('/')
+    } catch (error: any) {
+      alert(error.message)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -51,24 +78,6 @@ export default function LoginPage() {
             priority
           />
         </Link>
-
-        <div className='hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-400'>
-          <Link href='/' className='hover:text-blue-600 transition-colors'>
-            Home
-          </Link>
-          <Link
-            href='/products'
-            className='hover:text-blue-600 transition-colors'
-          >
-            Products
-          </Link>
-          <Link
-            href='/register'
-            className='bg-[#1d61f2] text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-all shadow-sm'
-          >
-            Register
-          </Link>
-        </div>
       </nav>
 
       <main className='flex flex-col items-center justify-center p-4 py-12 relative max-w-7xl mx-auto'>
@@ -79,6 +88,12 @@ export default function LoginPage() {
           <ChevronLeft className='w-5 h-5' />
           Back
         </button>
+
+        {registeredSuccess && (
+          <div className='mb-4 rounded-lg bg-green-100 text-green-700 px-4 py-3 text-sm font-semibold'>
+            Se ha registrado satisfactoriamente
+          </div>
+        )}
 
         <div className='w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden mt-8 md:mt-0'>
           <div className='p-8 pt-12 flex flex-col items-center'>
@@ -170,7 +185,6 @@ export default function LoginPage() {
                 </label>
                 <Link
                   href='/forgot-password'
-                  icon-lucide='key'
                   className='text-blue-600 dark:text-blue-400 hover:underline'
                 >
                   Forgot password?
@@ -189,45 +203,8 @@ export default function LoginPage() {
                 )}
               </button>
             </form>
-
-            <div className='relative w-full my-8'>
-              <div className='absolute inset-0 flex items-center'>
-                <div className='w-full border-t border-slate-200 dark:border-slate-800'></div>
-              </div>
-              <div className='relative flex justify-center text-[10px] uppercase tracking-widest'>
-                <span className='bg-white dark:bg-slate-900 px-3 text-slate-400 font-bold'>
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            <button className='w-full flex items-center justify-center gap-3 border border-slate-300 dark:border-slate-700 py-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-bold text-slate-700 dark:text-slate-200 text-sm active:scale-[0.98]'>
-              <Image
-                src='https://www.svgrepo.com/show/475656/google-color.svg'
-                width={20}
-                height={20}
-                alt='Google logo'
-              />
-              Continue with Google
-            </button>
-          </div>
-
-          <div className='bg-slate-50 dark:bg-slate-800/50 p-6 border-t border-slate-200 dark:border-slate-800 text-center'>
-            <p className='text-sm text-slate-600 dark:text-slate-400 font-medium'>
-              Don&apos;t have an account?{' '}
-              <Link
-                href='/register'
-                className='text-blue-600 dark:text-blue-400 font-bold hover:underline'
-              >
-                Register now
-              </Link>
-            </p>
           </div>
         </div>
-
-        <footer className='mt-12 text-slate-400 dark:text-slate-600 text-[11px] text-center uppercase tracking-tighter'>
-          © 2026 Raul & Alejandra.
-        </footer>
       </main>
     </div>
   )

@@ -1,7 +1,7 @@
-// src/app/api/login/route.ts
 import { prisma } from '@/lib/prisma'
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcrypt'
+import { generateToken } from '@/lib/jwt'
 
 export async function POST(req: Request) {
   try {
@@ -14,10 +14,7 @@ export async function POST(req: Request) {
       )
     }
 
-    // Buscar usuario por email
-    const user = await prisma.user.findUnique({
-      where: { email },
-    })
+    const user = await prisma.user.findUnique({ where: { email } })
 
     if (!user) {
       return NextResponse.json(
@@ -26,7 +23,6 @@ export async function POST(req: Request) {
       )
     }
 
-    // Comparar password
     const isPasswordValid = await bcrypt.compare(password, user.password)
 
     if (!isPasswordValid) {
@@ -36,14 +32,28 @@ export async function POST(req: Request) {
       )
     }
 
-    // Login correcto (NO devolver password)
-    return NextResponse.json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      createdAt: user.createdAt,
+    const token = generateToken({ id: user.id, email: user.email })
+
+    const response = NextResponse.json({
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+      },
+      token, // include token for client usage
     })
-  } catch (error) {
+
+    response.cookies.set('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7,
+    })
+
+    return response
+  } catch {
     return NextResponse.json({ error: 'Login failed' }, { status: 500 })
   }
 }
