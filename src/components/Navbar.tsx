@@ -73,14 +73,15 @@ const Navbar = async () => {
             0
           </span>
         </div>
-
-        <Image
-          className='rounded-full border border-gray-500/15 object-cover'
-          src='/profile.jpg'
-          width={40}
-          height={40}
-          alt='profile'
-        />
+        {token && (
+          <Image
+            className='rounded-full border border-gray-500/15 object-cover'
+            src='/profile.jpg'
+            width={40}
+            height={40}
+            alt='profile'
+          />
+        )}
       </div>
     </nav>
   )
