@@ -1,8 +1,12 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { ShoppingCart, Search } from 'lucide-react'
+import LogoutButton from './logout'
+import { getToken } from '@/lib/session'
 
-const Navbar = () => {
+const Navbar = async () => {
+  const token = await getToken()
+  console.log(token)
   return (
     <nav className='flex items-center justify-between px-8 py-4 shadow-sm'>
       <div className='flex items-center justify-start gap-6'>
@@ -45,16 +49,24 @@ const Navbar = () => {
           />
         </div>
 
-        <Link href='/login' className='hover:text-blue-600 text-sm'>
-          Login
-        </Link>
-        <Link
-          href='/register'
-          className='bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm'
-        >
-          Register
-        </Link>
-
+        {!token ? (
+          <>
+            <Link
+              href='/login'
+              className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'
+            >
+              Login
+            </Link>
+            <Link
+              href='/register'
+              className='px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700'
+            >
+              Register
+            </Link>
+          </>
+        ) : (
+          <LogoutButton />
+        )}
         <div className='relative cursor-pointer'>
           <ShoppingCart className='w-6 h-6' />
           <span className='absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center'>

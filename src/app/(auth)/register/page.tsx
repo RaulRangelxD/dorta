@@ -71,8 +71,8 @@ export default function RegisterPage() {
       }
 
       router.push('/login?registered=success')
-    } catch (error: any) {
-      alert(error.message)
+    } catch (error) {
+      alert(error)
     } finally {
       setIsLoading(false)
     }

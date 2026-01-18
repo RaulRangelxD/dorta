@@ -58,8 +58,8 @@ export default function LoginPage() {
       document.cookie = `token=${resData.token}; path=/; max-age=86400; secure; samesite=strict`
 
       router.push('/')
-    } catch (error: any) {
-      alert(error.message)
+    } catch (error) {
+      alert(error)
     } finally {
       setIsLoading(false)
     }
