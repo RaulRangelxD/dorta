@@ -2,15 +2,14 @@
 
 import React, { ReactNode } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Product } from '@/utils/types'
 import { Edit, ShoppingCart, Trash2 } from 'lucide-react'
-import { postCart } from '@/api/cart'
 import {
   ProductCardContext,
   useProductCardContext,
 } from '@/components/cards/ProductCard/ProductCardContext'
+import { useCart } from '@/context/CartContext'
 
 type ProductCardProps = {
   product: Product
@@ -80,26 +79,21 @@ const ProductInfo = ({ children }: { children: ReactNode }) => {
 
 const ProductAction = () => {
   const { product } = useProductCardContext()
+  const { addProduct } = useCart()
 
-  const addToCart = async () => {
+  const handleAddToCart = async () => {
     try {
-      const userToken = localStorage.getItem('user_token') || null
-      const existingCartToken = localStorage.getItem('cart') || undefined
-
-      const response = await postCart()
-
-      if (!userToken) {
-        localStorage.setItem('cart', response)
-      }
-      alert(`Producto añadido al carrito`)
+      await addProduct(product.id, 1)
+      alert(`Producto "${product.name}" añadido al carrito`)
     } catch (error) {
-      console.error('Error adding to cart', error)
+      console.error('Error adding to cart:', error)
+      alert('No se pudo añadir el producto al carrito')
     }
   }
 
   return (
     <button
-      onClick={addToCart}
+      onClick={handleAddToCart}
       className='flex gap-2 w-full justify-center items-center bg-blue-700 py-1 rounded font-medium hover:bg-blue-800 transition-colors'
     >
       <ShoppingCart className='w-4 h-4' />

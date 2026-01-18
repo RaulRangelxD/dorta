@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { ProductCard } from '@/components/cards/ProductCard/ProductCard'
 import type { Product } from '@/utils/types'
+import Loading from '@/components/Loading'
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([])
@@ -32,13 +33,13 @@ export default function Home() {
   if (loading) {
     return (
       <div className='flex min-h-screen items-center justify-center'>
-        <p>Cargando productos...</p>
+        <Loading size={64} text='Loading products...' />
       </div>
     )
   }
 
   return (
-    <div className='min-h-screen bg-zinc-50 dark:bg-black p-8'>
+    <div className='min-h-screen bg-slate-50 dark:bg-slate-950 p-8'>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
         {products.map((product) => (
           <ProductCard

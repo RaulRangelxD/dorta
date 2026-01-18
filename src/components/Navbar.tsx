@@ -1,21 +1,22 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { ShoppingCart, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 import LogoutButton from './logout'
+import CartDropdown from './CartDropdown'
 import { getToken } from '@/lib/session'
 
 const Navbar = async () => {
   const token = await getToken()
-  console.log(token)
+
   return (
-    <nav className='flex items-center justify-between px-8 py-4 shadow-sm'>
+    <nav className='flex items-center justify-between px-8 py-4 shadow-sm bg-white dark:bg-slate-900'>
       <div className='flex items-center justify-start gap-6'>
         <Image
-          className='rounded   object-cover'
+          className='rounded object-cover'
           src='/logo.webp'
           width={160}
           height={80}
-          alt='profile'
+          alt='logo'
         />
         <div className='flex items-center gap-6 font-medium text-sm'>
           <Link
@@ -67,12 +68,9 @@ const Navbar = async () => {
         ) : (
           <LogoutButton />
         )}
-        <div className='relative cursor-pointer'>
-          <ShoppingCart className='w-6 h-6' />
-          <span className='absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center'>
-            0
-          </span>
-        </div>
+
+        <CartDropdown />
+
         {token && (
           <Image
             className='rounded-full border border-gray-500/15 object-cover'

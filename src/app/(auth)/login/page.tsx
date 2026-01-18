@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -56,6 +58,22 @@ export default function LoginPage() {
 
       const resData = await response.json()
       document.cookie = `token=${resData.token}; path=/; max-age=86400; secure; samesite=strict`
+
+      const anonymousCartId = localStorage.getItem('cartId')
+      if (anonymousCartId) {
+        try {
+          await fetch('/api/cart/associate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              cartId: Number(anonymousCartId),
+              userId: resData.user.id,
+            }),
+          })
+        } catch (err) {
+          console.error('Error associating anonymous cart:', err)
+        }
+      }
 
       router.push('/')
     } catch (error) {
