@@ -4,20 +4,20 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion, Variants } from 'framer-motion';
 import {
-  ChevronLeft,
   ShoppingCart,
   ArrowLeft,
   Loader2,
   Info,
   PackageSearch,
+  User,
 } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
-// Tipos para TypeScript
 interface Product {
   id: number;
   name: string;
-  price?: number; // Por si luego añades precios
+  price?: number;
 }
 
 interface CategoryWithProducts {
@@ -37,7 +37,7 @@ const itemVars: Variants = {
 };
 
 export default function CategoryDetailPage() {
-  const { id } = useParams(); // Captura el ID de la URL
+  const { id } = useParams();
   const router = useRouter();
   const [data, setData] = useState<CategoryWithProducts | null>(null);
   const [loading, setLoading] = useState(true);
@@ -45,15 +45,12 @@ export default function CategoryDetailPage() {
   useEffect(() => {
     async function fetchDetails() {
       try {
-        // Consultamos la API de categorías
         const res = await fetch('/api/categories');
         const categories: CategoryWithProducts[] = await res.json();
-
-        // Buscamos la categoría específica por el ID
         const selected = categories.find((c) => c.id === Number(id));
         setData(selected || null);
       } catch (error) {
-        console.error('Error cargando productos:', error);
+        console.error('Error loading products:', error);
       } finally {
         setLoading(false);
       }
@@ -73,12 +70,12 @@ export default function CategoryDetailPage() {
     return (
       <div className='min-h-screen bg-[#020817] text-white flex flex-col items-center justify-center gap-4'>
         <PackageSearch size={64} className='text-slate-700' />
-        <p className='text-slate-400'>Categoría no encontrada</p>
+        <p className='text-slate-400'>Category not found</p>
         <button
           onClick={() => router.push('/categories')}
           className='text-blue-500 hover:underline'
         >
-          Volver al catálogo
+          Back to catalog
         </button>
       </div>
     );
@@ -86,32 +83,48 @@ export default function CategoryDetailPage() {
 
   return (
     <div className='min-h-screen bg-[#020817] text-slate-100 pb-20'>
-      {/* Header Detalle */}
-      <div className='bg-[#0b1120] border-b border-slate-800 p-6 sticky top-0 z-40 backdrop-blur-sm bg-opacity-80'>
-        <div className='max-w-5xl mx-auto flex items-center justify-between'>
-          <button
-            onClick={() => router.back()}
-            className='flex items-center gap-2 text-slate-400 hover:text-white transition-colors'
-          >
-            <ArrowLeft size={20} />
-            <span className='text-sm font-medium'>Volver a Categorías</span>
-          </button>
-          <div className='flex gap-4'>
-            <ShoppingCart className='w-5 h-5 text-slate-400' />
-          </div>
+      {/* BRANDED NAVBAR - COLOR #0b1120 */}
+      <nav className='w-full bg-[#0b1120] border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-50'>
+        <div className='flex items-center gap-8'>
+          <Link href='/'>
+            <Image
+              src='/LOGO.png'
+              alt='Dorta Logo'
+              width={120}
+              height={40}
+              className='h-10 w-auto object-contain brightness-110'
+              priority
+            />
+          </Link>
         </div>
-      </div>
+
+        <div className='flex items-center gap-6 text-slate-400'>
+          <ShoppingCart className='w-5 h-5 hover:text-white cursor-pointer transition-colors' />
+          <User className='w-5 h-5 hover:text-white cursor-pointer transition-colors' />
+        </div>
+      </nav>
 
       <main className='max-w-5xl mx-auto px-6 mt-12'>
+        {/* BACK BUTTON */}
+        <button
+          onClick={() => router.back()}
+          className='flex items-center gap-2 text-slate-500 hover:text-white transition-colors mb-8 group'
+        >
+          <ArrowLeft
+            size={18}
+            className='group-hover:-translate-x-1 transition-transform'
+          />
+          <span className='text-sm font-medium'>Back to Categories</span>
+        </button>
+
         <header className='mb-12'>
           <h1 className='text-4xl font-bold text-white mb-2'>{data.name}</h1>
           <p className='text-slate-500'>
-            Mostrando {data.products.length} repuestos disponibles en
-            inventario.
+            Showing {data.products.length} spare parts available in stock.
           </p>
         </header>
 
-        {/* LISTA DE PRODUCTOS */}
+        {/* PRODUCT LIST */}
         <motion.div
           variants={containerVars}
           initial='hidden'
@@ -123,33 +136,34 @@ export default function CategoryDetailPage() {
               <motion.div
                 key={product.id}
                 variants={itemVars}
-                className='bg-[#0b1120] border border-slate-800 p-5 rounded-2xl flex items-center justify-between group hover:border-blue-600/50 transition-all'
+                className='bg-[#0b1120] border border-slate-800 p-5 rounded-2xl flex items-center justify-between group hover:border-blue-600/50 transition-all shadow-lg'
               >
                 <div className='flex items-center gap-4'>
-                  <div className='w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center border border-slate-800'>
-                    {/* --- AQUÍ PUEDES PONER UNA IMAGEN MINIATURA DEL PRODUCTO --- */}
+                  <div className='w-14 h-14 bg-[#020817] rounded-xl flex items-center justify-center border border-slate-800'>
                     <Info
-                      size={20}
+                      size={24}
                       className='text-slate-600 group-hover:text-blue-500 transition-colors'
                     />
                   </div>
                   <div>
-                    <h3 className='font-bold text-white'>{product.name}</h3>
-                    <p className='text-xs text-slate-500'>
-                      ID: REP-{product.id}00
+                    <h3 className='font-bold text-white group-hover:text-blue-400 transition-colors'>
+                      {product.name}
+                    </h3>
+                    <p className='text-xs text-slate-500 mt-1'>
+                      SKU: PART-{product.id}00
                     </p>
                   </div>
                 </div>
 
-                <button className='px-5 py-2 bg-slate-900 border border-slate-800 hover:border-blue-600 hover:bg-blue-600/10 text-xs font-bold rounded-xl transition-all'>
-                  Ver Detalles
+                <button className='px-6 py-2.5 bg-[#020817] border border-slate-800 hover:border-blue-600 hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all shadow-md'>
+                  View Details
                 </button>
               </motion.div>
             ))
           ) : (
-            <div className='text-center py-20 bg-slate-900/20 rounded-3xl border border-dashed border-slate-800'>
+            <div className='text-center py-20 bg-[#0b1120]/50 rounded-3xl border border-dashed border-slate-800'>
               <p className='text-slate-500 italic'>
-                Aún no hay productos en esta categoría.
+                No products found in this category yet.
               </p>
             </div>
           )}
