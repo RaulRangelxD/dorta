@@ -46,10 +46,9 @@ export const ProductCard = ({
 const ProductImage = () => {
   const { product } = useProductCardContext()
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL
-
-  const imageUrl =
-    product.img && baseUrl ? `${baseUrl}${product.img}` : '/placeholder.webp'
+  const imageUrl = product.img?.startsWith('http')
+    ? product.img
+    : '/placeholder.webp'
 
   return (
     <div className='relative w-full h-64 overflow-hidden'>
@@ -57,6 +56,7 @@ const ProductImage = () => {
         src={imageUrl}
         alt={product.name}
         fill
+        sizes='(max-width: 768px) 100vw, 25vw'
         className='object-cover transition-transform duration-300 group-hover:scale-105'
       />
     </div>
