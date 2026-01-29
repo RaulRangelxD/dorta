@@ -40,7 +40,7 @@ export default function Home() {
 
   return (
     <div className='min-h-screen bg-slate-50 dark:bg-slate-950 p-8'>
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
+      <div className='flex flex-wrap gap-8 justify-center'>
         {products.map((product) => (
           <ProductCard
             key={product.id}
@@ -49,10 +49,10 @@ export default function Home() {
             info={
               <ProductCard.Info>
                 <ProductCard.Name />
-                <ProductCard.Price />
+                <ProductCard.Action />
               </ProductCard.Info>
             }
-            action={<ProductCard.Action />}
+            size='w-64'
           />
         ))}
       </div>
