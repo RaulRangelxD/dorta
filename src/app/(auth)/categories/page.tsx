@@ -26,6 +26,7 @@ interface Product {
 interface Category {
   id: number;
   name: string;
+  image: string;
   products: Product[];
 }
 
@@ -157,10 +158,19 @@ export default function CategoriesPage() {
                     className='group bg-[#0b1120] border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all shadow-xl'
                   >
                     <div className='h-48 bg-[#020817] relative flex items-center justify-center border-b border-slate-800/50'>
-                      <Package
-                        size={48}
-                        className='text-slate-800 group-hover:text-blue-600 transition-colors'
-                      />
+                      {cat.image ? (
+                        <Image
+                          src={cat.image}
+                          alt={cat.name}
+                          fill
+                          className='object-cover'
+                        />
+                      ) : (
+                        <Package
+                          size={48}
+                          className='text-slate-800 group-hover:text-blue-600 transition-colors'
+                        />
+                      )}
                     </div>
                     <div className='p-6'>
                       <h3 className='text-xl font-bold text-white mb-2'>
