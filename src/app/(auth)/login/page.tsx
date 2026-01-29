@@ -8,7 +8,6 @@ import * as z from 'zod'
 import { Mail, Lock, Loader2, Eye, EyeOff, ChevronLeft } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
 
 const loginSchema = z.object({
@@ -85,19 +84,6 @@ export default function LoginPage() {
 
   return (
     <div className='min-h-screen bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300'>
-      <nav className='w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-3 flex items-center justify-between sticky top-0 z-10'>
-        <Link href='/'>
-          <Image
-            src='/LOGO.png'
-            alt='Dorta Logo'
-            width={120}
-            height={40}
-            className='h-10 w-auto object-contain dark:brightness-110'
-            priority
-          />
-        </Link>
-      </nav>
-
       <main className='flex flex-col items-center justify-center p-4 py-12 relative max-w-7xl mx-auto'>
         <button
           onClick={() => router.back()}

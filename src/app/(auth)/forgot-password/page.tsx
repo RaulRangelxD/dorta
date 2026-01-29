@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -40,19 +39,6 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className='min-h-screen bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-300'>
-      <nav className='w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-3 flex items-center justify-between sticky top-0 z-10'>
-        <Link href='/'>
-          <Image
-            src='/LOGO.png'
-            alt='Dorta Logo'
-            width={120}
-            height={40}
-            className='h-10 w-auto object-contain cursor-pointer dark:brightness-110'
-            priority
-          />
-        </Link>
-      </nav>
-
       <main className='flex-1 flex flex-col items-center justify-center p-4 py-12 relative max-w-7xl mx-auto w-full'>
         <button
           onClick={() => router.back()}

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Search } from 'lucide-react'
+import { Search, Box, LayoutGrid, Laptop } from 'lucide-react'
 import LogoutButton from './logout'
 import CartDropdown from './CartDropdown'
 import { getToken } from '@/lib/session'
@@ -9,32 +9,35 @@ const Navbar = async () => {
   const token = await getToken()
 
   return (
-    <nav className='flex items-center justify-between px-8 py-4 shadow-sm bg-white dark:bg-slate-900'>
+    <nav className='flex items-center justify-between px-8 py-4 shadow-sm  bg-slate-900 text-slate-100 font-sans'>
       <div className='flex items-center justify-start gap-6'>
         <Image
           className='rounded object-cover'
           src='/logo.webp'
-          width={160}
-          height={80}
+          width={140}
+          height={70}
           alt='logo'
         />
         <div className='flex items-center gap-6 font-medium text-sm'>
           <Link
             href='/products'
-            className='hover:text-blue-600 transition-colors'
+            className='hover:text-white flex items-center gap-2 transition-colors'
           >
+            <Box className='inline w-4 h-4 mr-1' />
             Products
           </Link>
           <Link
             href='/categories'
-            className='hover:text-blue-600 transition-colors'
+            className='hover:text-white flex items-center gap-2 transition-colors'
           >
+            <LayoutGrid className='inline w-4 h-4 mr-1' />
             Categories
           </Link>
           <Link
             href='/dashboard'
-            className='hover:text-blue-600 transition-colors'
+            className='hover:text-white flex items-center gap-2 transition-colors'
           >
+            <Laptop className='inline w-4 h-4 mr-1' />
             Dashboard
           </Link>
         </div>
@@ -51,35 +54,35 @@ const Navbar = async () => {
         </div>
 
         {!token ? (
-          <>
+          <div>
             <Link
               href='/login'
-              className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'
+              className='px-4 py-2 bg-blue-600 text-white rounded-s-full hover:bg-blue-700'
             >
               Login
             </Link>
             <Link
               href='/register'
-              className='px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700'
+              className='px-4 py-2 bg-green-600 text-white rounded-e-full hover:bg-green-700'
             >
               Register
             </Link>
-          </>
+          </div>
         ) : (
-          <LogoutButton />
+          <div className='flex items-center gap-4 border border-slate-800 bg-slate-900/50 rounded-full ps-4'>
+            Admin
+            <Image
+              className='rounded-full border border-gray-500/15 object-cover'
+              src='/profile.jpg'
+              width={40}
+              height={40}
+              alt='profile'
+            />
+            <LogoutButton />
+          </div>
         )}
 
         <CartDropdown />
-
-        {token && (
-          <Image
-            className='rounded-full border border-gray-500/15 object-cover'
-            src='/profile.jpg'
-            width={40}
-            height={40}
-            alt='profile'
-          />
-        )}
       </div>
     </nav>
   )

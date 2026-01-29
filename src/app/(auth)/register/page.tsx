@@ -80,38 +80,6 @@ export default function RegisterPage() {
 
   return (
     <div className='min-h-screen bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300'>
-      {/* Navbar */}
-      <nav className='w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-3 flex items-center justify-between sticky top-0 z-10'>
-        <Link href='/'>
-          <Image
-            src='/LOGO.png'
-            alt='Dorta Logo'
-            width={120}
-            height={40}
-            className='h-10 w-auto object-contain dark:brightness-110'
-            priority
-          />
-        </Link>
-
-        <div className='hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-400'>
-          <Link href='/' className='hover:text-blue-600 transition-colors'>
-            Home
-          </Link>
-          <Link
-            href='/products'
-            className='hover:text-blue-600 transition-colors'
-          >
-            Products
-          </Link>
-          <Link
-            href='/login'
-            className='bg-[#1d61f2] text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-all shadow-sm'
-          >
-            Log In
-          </Link>
-        </div>
-      </nav>
-
       <main className='flex flex-col items-center justify-center p-4 py-12 relative max-w-7xl mx-auto'>
         <button
           onClick={() => router.back()}
