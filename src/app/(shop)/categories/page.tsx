@@ -5,19 +5,15 @@ import { motion, Variants } from 'framer-motion';
 import {
   ChevronLeft,
   Package,
-  Search,
-  ShoppingCart,
-  User,
   ArrowRight,
   Loader2,
-  Refrigerator, // Usamos Refrigerator en lugar de Kitchen para evitar el error ts(2305)
+  Refrigerator,
   Wrench,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Definimos interfaces para evitar el error "Unexpected any"
 interface Product {
   id: number;
   name: string;
@@ -30,7 +26,6 @@ interface Category {
   products: Product[];
 }
 
-// Corregimos los tipos de Variants para evitar errores de Framer Motion
 const containerVars: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -44,7 +39,7 @@ const itemVars: Variants = {
   visible: {
     y: 0,
     opacity: 1,
-    transition: { duration: 0.4, ease: 'easeOut' }, // ease debe ser un string válido
+    transition: { duration: 0.4, ease: 'easeOut' },
   },
 };
 
@@ -70,45 +65,17 @@ export default function CategoriesPage() {
   }, []);
 
   return (
-    <div className='min-h-screen bg-[#020817] text-slate-100 font-sans'>
-      {/* NAVBAR CON EL AZUL CLARO DE TU CAPTURA (#0b1120) */}
-      <nav className='w-full bg-[#0b1120] border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-50'>
-        <div className='flex items-center gap-8'>
-          <Link href='/'>
-            <Image
-              src='/LOGO.png'
-              alt='Dorta Logo'
-              width={120}
-              height={40}
-              className='h-10 w-auto object-contain brightness-110'
-              priority
-            />
-          </Link>
-        </div>
-
-        {/* SEARCH BAR INTEGRADA */}
-        <div className='hidden md:flex flex-1 max-w-md mx-8 relative'>
-          <Search className='absolute left-3 top-2.5 w-4 h-4 text-slate-500' />
-          <input
-            type='text'
-            placeholder='Search by part or model...'
-            className='w-full pl-10 pr-4 py-2 bg-[#020817] border border-slate-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-white'
-          />
-        </div>
-
-        <div className='flex items-center gap-6 text-slate-400'>
-          <ShoppingCart className='w-5 h-5 hover:text-white cursor-pointer transition-colors' />
-          <User className='w-5 h-5 hover:text-white cursor-pointer transition-colors' />
-        </div>
-      </nav>
-
+    <div className='min-h-screen bg-[#020817] text-white'>
       <main className='max-w-7xl mx-auto p-6 py-10'>
-        <button
-          onClick={() => router.back()}
-          className='flex items-center gap-2 text-slate-500 hover:text-blue-400 mb-8 transition-colors text-sm font-medium'
-        >
-          <ChevronLeft size={18} /> Back
-        </button>
+        {/* CABECERA SUPERIOR (SOLO BOTÓN BACK) */}
+        <div className='mb-12'>
+          <button
+            onClick={() => router.back()}
+            className='flex items-center gap-2 text-slate-500 hover:text-blue-400 transition-colors text-sm font-medium'
+          >
+            <ChevronLeft size={18} /> Back
+          </button>
+        </div>
 
         <header className='mb-12'>
           <h1 className='text-4xl font-bold tracking-tight text-white mb-3'>
@@ -120,9 +87,9 @@ export default function CategoriesPage() {
         </header>
 
         <div className='flex flex-col lg:flex-row gap-8'>
-          {/* SIDEBAR CON EL MISMO AZUL (#0b1120) */}
+          {/* SIDEBAR */}
           <aside className='w-full lg:w-64 shrink-0'>
-            <div className='bg-[#0b1120] border border-slate-800 rounded-2xl p-6 sticky top-28'>
+            <div className='bg-[#0b1120] border border-slate-800 rounded-2xl p-6 sticky top-10'>
               <h3 className='text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-6'>
                 Departments
               </h3>

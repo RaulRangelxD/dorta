@@ -82,28 +82,6 @@ export default function CategoryDetailPage() {
   }
 
   return (
-    <div className='min-h-screen bg-[#020817] text-slate-100 pb-20'>
-      {/* BRANDED NAVBAR - COLOR #0b1120 */}
-      <nav className='w-full bg-[#0b1120] border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-50'>
-        <div className='flex items-center gap-8'>
-          <Link href='/'>
-            <Image
-              src='/LOGO.png'
-              alt='Dorta Logo'
-              width={120}
-              height={40}
-              className='h-10 w-auto object-contain brightness-110'
-              priority
-            />
-          </Link>
-        </div>
-
-        <div className='flex items-center gap-6 text-slate-400'>
-          <ShoppingCart className='w-5 h-5 hover:text-white cursor-pointer transition-colors' />
-          <User className='w-5 h-5 hover:text-white cursor-pointer transition-colors' />
-        </div>
-      </nav>
-
       <main className='max-w-5xl mx-auto px-6 mt-12'>
         {/* BACK BUTTON */}
         <button
@@ -169,6 +147,5 @@ export default function CategoryDetailPage() {
           )}
         </motion.div>
       </main>
-    </div>
-  );
+  )
 }
