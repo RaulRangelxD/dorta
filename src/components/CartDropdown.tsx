@@ -2,13 +2,15 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
-import { Minus, Plus, ShoppingCart, X } from 'lucide-react'
+import { Banknote, Minus, Package, Plus, ShoppingCart, X } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
-import Loading from './Loading'
+import { motion } from 'framer-motion'
 
 const CartDropdown = () => {
-  const { cart, loading, addProduct, removeProduct, clearCart } = useCart()
+  const { cart, addProduct, removeProduct, clearCart } = useCart()
   const [cartOpen, setCartOpen] = useState(false)
+  const [incId, setIncId] = useState<number | null>(null)
+  const [decId, setDecId] = useState<number | null>(null)
 
   const totalItems = cart?.products.reduce((acc, p) => acc + p.quantity, 0) || 0
 
@@ -16,93 +18,152 @@ const CartDropdown = () => {
     cart?.products.reduce((acc, p) => acc + p.product.price * p.quantity, 0) ||
     0
 
-  const decreaseQuantity = async (productId: number, currentQty: number) => {
-    if (currentQty <= 1) {
-      await removeProduct(productId)
-    } else {
-      await addProduct(productId, -1)
-    }
-  }
-
   const increaseQuantity = async (productId: number) => {
     await addProduct(productId, 1)
+    setIncId(productId)
+  }
+
+  const decreaseQuantity = async (productId: number, currentQty: number) => {
+    await (currentQty <= 1
+      ? removeProduct(productId)
+      : addProduct(productId, -1))
+
+    setDecId(productId)
+  }
+
+  const deleteProduct = async (productId: number) => {
+    await removeProduct(productId)
   }
 
   return (
     <div className='relative'>
-      <div
-        className='relative cursor-pointer'
+      <motion.div
         onClick={() => setCartOpen(!cartOpen)}
+        className='relative group cursor-pointer'
+        whileTap={{ scale: 0.9 }}
       >
-        <ShoppingCart className='w-6 h-6' />
-        <span className='absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center'>
+        <ShoppingCart
+          size={24}
+          className='text-white group-hover:scale-105 transition-all'
+        />
+        <span className='absolute -top-2 -right-2 bg-blue-500 text-white group-hover:scale-110 text-[10px] rounded-full w-4 h-4 flex items-center justify-center transition-all'>
           {totalItems}
         </span>
-      </div>
+      </motion.div>
 
       {cartOpen && (
-        <div className='absolute right-0 mt-2 w-80 bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-900 rounded shadow-lg z-50 p-4'>
-          {loading ? (
-            <Loading />
-          ) : cart?.products.length ? (
+        <div className='absolute max-h-[80vh] right-0 mt-2 w-96 bg-slate-900 border border-slate-800 hover:border-blue-500/50 rounded-2xl transition-all shadow-lg z-50 p-4 overflow-y-auto custom-scroll'>
+          {cart?.products.length ? (
             <>
-              {cart.products.map((item, index) => (
+              {cart.products.map((item) => (
                 <div
                   key={item.product.id}
-                  className={`${index != cart.products.length - 1 && 'pb-2 border-b border-gray-200 dark:border-gray-800'} flex items-center gap-3 mb-3`}
+                  className='group pb-2 border-b border-slate-800 hover:border-blue-500/50 transition-all flex items-center gap-3 mb-3'
                 >
-                  <Image
-                    src={item.product.img || '/placeholder.webp'}
-                    alt={item.product.name}
-                    width={50}
-                    height={50}
-                    className='object-cover rounded'
-                  />
+                  <div className='relative flex items-center justify-center rounded-2xl overflow-hidden w-32 min-h-32'>
+                    {item.product.img?.startsWith('http') ? (
+                      <Image
+                        src={item.product.img}
+                        alt={item.product.name}
+                        fill
+                        className='object-cover group-hover:scale-105 transition-transform'
+                      />
+                    ) : (
+                      <Package
+                        size={32}
+                        className='text-slate-700 group-hover:text-blue-500 transition-colors'
+                      />
+                    )}
+                  </div>
                   <div className='flex-1'>
                     <p className='font-medium'>{item.product.name}</p>
                     <div className='flex items-center gap-2 mt-1'>
-                      <button
+                      <motion.button
                         onClick={() =>
                           decreaseQuantity(item.product.id, item.quantity)
                         }
-                        className='px-1 py-1 bg-gray-300 dark:bg-gray-700 text-sm rounded hover:bg-gray-400 dark:hover:bg-gray-600'
+                        className='relative flex gap-2 px-2 py-1 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
+                        whileTap={{ scale: 0.9 }}
                       >
-                        <Minus size={16} />
-                      </button>
+                        <motion.span
+                          animate={
+                            decId === item.product.id
+                              ? { scale: [1, 1.4, 1], rotate: [0, -15, 15, 0] }
+                              : { scale: 1 }
+                          }
+                          transition={{ duration: 0.4 }}
+                          onAnimationComplete={() => setDecId(null)}
+                          className={
+                            decId === item.product.id
+                              ? 'text-green-400'
+                              : 'text-blue-500'
+                          }
+                        >
+                          <Minus size={16} />
+                        </motion.span>
+                      </motion.button>
                       <span className='px-2'>{item.quantity}</span>
-                      <button
+                      <motion.button
                         onClick={() => increaseQuantity(item.product.id)}
-                        className='px-1 py-1 bg-gray-300 dark:bg-gray-700 text-sm rounded hover:bg-gray-400 dark:hover:bg-gray-600'
+                        className='relative flex gap-2 px-2 py-1 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
+                        whileTap={{ scale: 0.9 }}
                       >
-                        <Plus size={16} />
-                      </button>
+                        <motion.span
+                          animate={
+                            incId === item.product.id
+                              ? { scale: [1, 1.4, 1], rotate: [0, -15, 15, 0] }
+                              : { scale: 1 }
+                          }
+                          transition={{ duration: 0.4 }}
+                          onAnimationComplete={() => setIncId(null)}
+                          className={
+                            incId === item.product.id
+                              ? 'text-green-400'
+                              : 'text-blue-500'
+                          }
+                        >
+                          <Plus size={16} />
+                        </motion.span>
+                      </motion.button>
                     </div>
                     <p className='text-sm text-gray-500 dark:text-gray-400 mt-1'>
                       ${item.product.price.toFixed(2)} p/u × {item.quantity} = $
                       {(item.product.price * item.quantity).toFixed(2)}
                     </p>
                   </div>
-                  <button
-                    onClick={() => removeProduct(item.product.id)}
-                    className='px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm'
+                  <motion.button
+                    onClick={() => deleteProduct(item.product.id)}
+                    whileTap={{ scale: 0.9 }}
+                    className='relative flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-red-500/50 rounded transition-colors'
                   >
-                    <X size={16} />
-                  </button>
+                    <X className='text-red-500' size={16} />
+                  </motion.button>
                 </div>
               ))}
 
-              <div className='border-t border-gray-300 dark:border-gray-700 pt-3 mt-2 flex justify-between items-center font-semibold text-gray-700 dark:text-gray-200'>
+              <div className='pt-3 mt-2 flex justify-between items-center font-semibold'>
                 <span>Total:</span>
                 <span>${totalPrice.toFixed(2)}</span>
               </div>
 
-              <div className='flex justify-end mt-3'>
-                <button
+              <div className='flex justify-between mt-3'>
+                <motion.button
                   onClick={clearCart}
-                  className='px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm'
+                  whileTap={{ scale: 0.9 }}
+                  className='relative px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-red-500/50 rounded transition-colors'
                 >
-                  Vaciar
-                </button>
+                  <ShoppingCart className='text-red-500' size={16} />
+                  <span className='absolute -top-0.5 text-red-500 text-[10px] rounded-full w-4 h-4 flex items-center justify-center'>
+                    x
+                  </span>
+                </motion.button>
+                <motion.button
+                  onClick={clearCart}
+                  whileTap={{ scale: 0.9 }}
+                  className=' px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-green-500/50 rounded transition-colors'
+                >
+                  <Banknote className='text-green-500' size={16} />
+                </motion.button>
               </div>
             </>
           ) : (

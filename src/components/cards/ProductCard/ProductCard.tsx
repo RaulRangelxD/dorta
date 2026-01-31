@@ -82,7 +82,7 @@ const ProductImage = () => {
       ) : (
         <Package
           size={isList ? 32 : 48}
-          className='text-slate-700 group-hover:text-blue-500'
+          className='text-slate-700 group-hover:text-blue-500 transition-colors'
         />
       )}
     </div>

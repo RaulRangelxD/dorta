@@ -33,7 +33,7 @@ export default function RootLayout({
           <header>
             <Navbar />
           </header>
-          <main>{children}</main>
+          <main className='min-h-screen pt-16 bg-slate-950'>{children}</main>
           <footer></footer>
         </CartProvider>
       </body>

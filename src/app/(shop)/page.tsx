@@ -40,8 +40,8 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div className='min-h-screen bg-slate-950 text-white'>
-      <main className='max-w-7xl mx-auto p-6 py-10'>
+    <div className='min-h-full bg-slate-950 text-white'>
+      <div className='max-w-7xl mx-auto px-6 pt-10'>
         <div className='flex flex-row flex-nowrap w-full mb-12 justify-end items-center'>
           <div className='relative flex items-center bg-slate-900 rounded-2xl overflow-hidden rounded-s-2xl border border-slate-800 hover:border-blue-500/50'>
             <motion.div
@@ -128,7 +128,7 @@ export default function HomePage() {
             </motion.div>
           )}
         </div>
-      </main>
+      </div>
     </div>
   )
 }
