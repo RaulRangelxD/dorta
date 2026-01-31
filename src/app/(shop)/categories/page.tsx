@@ -1,32 +1,33 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, Variants } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   ChevronLeft,
   Package,
   ArrowRight,
-  Loader2,
   Refrigerator,
   Wrench,
+  Wind,
+  Cpu,
+  Sparkles,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
-interface Product {
-  id: number;
-  name: string;
-}
-
+// 1. DEFINICIÓN DE INTERFACES (Para que no salga error en 'Category')
 interface Category {
   id: number;
   name: string;
-  image: string;
-  products: Product[];
+  department: string;
+  description: string | null;
+  image: string | null;
+  products: any[];
 }
 
-const containerVars: Variants = {
+// 2. ANIMACIONES (Para corregir 'containerVars' e 'itemVars')
+const containerVars = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -34,40 +35,65 @@ const containerVars: Variants = {
   },
 };
 
-const itemVars: Variants = {
+const itemVars = {
   hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.4, ease: 'easeOut' },
-  },
+  visible: { y: 0, opacity: 1 },
 };
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeDept, setActiveDept] = useState('Major Appliances');
   const router = useRouter();
+
+  const departments = [
+    { name: 'Major Appliances', icon: Refrigerator },
+    { name: 'Tools & Repair', icon: Wrench },
+    { name: 'Climate Control', icon: Wind },
+    { name: 'Electronics', icon: Cpu },
+    { name: 'Care & Cleaning', icon: Sparkles },
+  ];
 
   useEffect(() => {
     async function fetchCats() {
       try {
         const res = await fetch('/api/categories');
-        if (!res.ok) throw new Error('Loading error');
         const data = await res.json();
         setCategories(data);
       } catch (err) {
-        console.error('Error loading categories:', err);
+        console.error('Error:', err);
       } finally {
-        setIsLoading(false);
+        setTimeout(() => setIsLoading(false), 800);
       }
     }
     fetchCats();
   }, []);
 
+  const renderSkeletons = () => (
+    <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'>
+      {[1, 2, 3].map((i) => (
+        <div
+          key={i}
+          className='bg-[#0b1120] border border-slate-800 rounded-2xl overflow-hidden animate-pulse'
+        >
+          <div className='h-48 bg-slate-800/50' />
+          <div className='p-6 space-y-4'>
+            <div className='h-6 bg-slate-800 rounded-md w-3/4' />
+            <div className='h-10 bg-slate-800/80 rounded-xl w-full' />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  // 3. FILTRADO (Asegúrate de que 'cat.department' no sea undefined)
+  const filteredCategories = categories.filter(
+    (cat) => (cat.department || 'Major Appliances') === activeDept,
+  );
+
   return (
     <div className='min-h-screen bg-[#020817] text-white'>
       <main className='max-w-7xl mx-auto p-6 py-10'>
-        {/* CABECERA SUPERIOR (SOLO BOTÓN BACK) */}
         <div className='mb-12'>
           <button
             onClick={() => router.back()}
@@ -79,7 +105,7 @@ export default function CategoriesPage() {
 
         <header className='mb-12'>
           <h1 className='text-4xl font-bold tracking-tight text-white mb-3'>
-            Spare Part Categories
+            {activeDept}
           </h1>
           <p className='text-slate-400 text-lg'>
             Find the exact part for your equipment.
@@ -87,42 +113,49 @@ export default function CategoriesPage() {
         </header>
 
         <div className='flex flex-col lg:flex-row gap-8'>
-          {/* SIDEBAR */}
           <aside className='w-full lg:w-64 shrink-0'>
             <div className='bg-[#0b1120] border border-slate-800 rounded-2xl p-6 sticky top-10'>
               <h3 className='text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-6'>
                 Departments
               </h3>
               <nav className='space-y-2'>
-                <button className='w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-600/10 text-blue-500 font-bold text-sm'>
-                  <Refrigerator size={18} /> Major Appliances
-                </button>
-                <button className='w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 transition-colors font-medium text-sm'>
-                  <Wrench size={18} /> Tools & Repair
-                </button>
+                {departments.map((dept) => {
+                  const Icon = dept.icon;
+                  const isActive = activeDept === dept.name;
+                  return (
+                    <button
+                      key={dept.name}
+                      onClick={() => setActiveDept(dept.name)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm ${
+                        isActive
+                          ? 'bg-blue-600/10 text-blue-500 font-bold'
+                          : 'text-slate-400 hover:bg-slate-800/50 font-medium'
+                      }`}
+                    >
+                      <Icon size={18} /> {dept.name}
+                    </button>
+                  );
+                })}
               </nav>
             </div>
           </aside>
 
-          {/* MAIN GRID */}
           <div className='flex-1'>
             {isLoading ? (
-              <div className='flex flex-col items-center justify-center py-20'>
-                <Loader2 className='w-10 h-10 text-blue-600 animate-spin mb-4' />
-                <p className='text-slate-500 text-sm'>Syncing database...</p>
-              </div>
-            ) : (
+              renderSkeletons()
+            ) : filteredCategories.length > 0 ? (
               <motion.div
+                key={activeDept}
                 variants={containerVars}
                 initial='hidden'
                 animate='visible'
                 className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
               >
-                {categories.map((cat) => (
+                {filteredCategories.map((cat) => (
                   <motion.div
                     key={cat.id}
                     variants={itemVars}
-                    className='group bg-[#0b1120] border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all shadow-xl'
+                    className='group bg-[#0b1120] border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all'
                   >
                     <div className='h-48 bg-[#020817] relative flex items-center justify-center border-b border-slate-800/50'>
                       {cat.image ? (
@@ -130,13 +163,10 @@ export default function CategoriesPage() {
                           src={cat.image}
                           alt={cat.name}
                           fill
-                          className='object-cover'
+                          className='object-cover group-hover:scale-105 transition-transform'
                         />
                       ) : (
-                        <Package
-                          size={48}
-                          className='text-slate-800 group-hover:text-blue-600 transition-colors'
-                        />
+                        <Package size={48} className='text-slate-800' />
                       )}
                     </div>
                     <div className='p-6'>
@@ -144,7 +174,7 @@ export default function CategoriesPage() {
                         {cat.name}
                       </h3>
                       <p className='text-slate-500 text-sm mb-6'>
-                        {cat.products.length} items listed.
+                        {cat.products?.length || 0} items listed.
                       </p>
                       <Link
                         href={`/categories/${cat.id}`}
@@ -156,6 +186,12 @@ export default function CategoriesPage() {
                   </motion.div>
                 ))}
               </motion.div>
+            ) : (
+              <div className='text-center py-20 bg-[#0b1120]/50 rounded-3xl border border-dashed border-slate-800'>
+                <p className='text-slate-500'>
+                  No categories in this department yet.
+                </p>
+              </div>
             )}
           </div>
         </div>

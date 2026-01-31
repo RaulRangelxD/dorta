@@ -19,6 +19,7 @@ export async function GET(req: Request) {
 
     const categories = await prisma.category.findMany({
       include: { products: true },
+      orderBy: { name: 'asc' }, // Opcional: para que salgan ordenadas
     });
     return NextResponse.json(categories);
   } catch (error) {
@@ -31,20 +32,30 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const name = formData.get('name') as string;
+    const department = formData.get('department') as string;
+    const description = formData.get('description') as string;
     const file = formData.get('image') as File;
 
-    if (!file || !name)
-      return NextResponse.json({ error: 'Missing data' }, { status: 400 });
+    if (!file || !name || !department)
+      return NextResponse.json(
+        { error: 'Missing required data' },
+        { status: 400 },
+      );
 
+    // Subida a Vercel Blob
     const blob = await put(
       `categories/${crypto.randomUUID()}-${file.name}`,
       file,
       { access: 'public' },
     );
 
-    // Corrección: Eliminado 'description' y usado 'image'
     const category = await prisma.category.create({
-      data: { name, image: blob.url },
+      data: {
+        name,
+        department,
+        description,
+        image: blob.url,
+      },
     });
 
     return NextResponse.json(category);
@@ -65,10 +76,15 @@ export async function PUT(req: Request) {
 
     const formData = await req.formData();
     const name = formData.get('name') as string;
+    const department = formData.get('department') as string;
+    const description = formData.get('description') as string;
     const file = formData.get('image');
 
-    const updateData: { name?: string; image?: string } = {};
+    // Construcción dinámica del objeto de actualización
+    const updateData: any = {};
     if (name) updateData.name = name;
+    if (department) updateData.department = department;
+    if (description !== null) updateData.description = description;
 
     if (file instanceof File && file.size > 0) {
       const blob = await put(
@@ -77,13 +93,22 @@ export async function PUT(req: Request) {
         { access: 'public' },
       );
       updateData.image = blob.url;
-      if (category.image) await del(category.image);
+
+      // Borrar imagen anterior si existía para ahorrar espacio
+      if (category.image) {
+        try {
+          await del(category.image);
+        } catch (e) {
+          console.error('No se pudo borrar la imagen anterior:', e);
+        }
+      }
     }
 
     const updated = await prisma.category.update({
       where: { id },
       data: updateData,
     });
+
     return NextResponse.json(updated);
   } catch (error) {
     console.error('PUT Error:', error);
@@ -99,7 +124,15 @@ export async function DELETE(req: Request) {
 
     if (!category)
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
-    if (category.image) await del(category.image);
+
+    // Borrar imagen de Vercel Blob
+    if (category.image) {
+      try {
+        await del(category.image);
+      } catch (e) {
+        console.warn('No se pudo borrar el blob:', e);
+      }
+    }
 
     await prisma.category.delete({ where: { id } });
     return NextResponse.json({ message: 'Deleted' });
