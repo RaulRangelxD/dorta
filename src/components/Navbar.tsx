@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Search, Box, LayoutGrid, Laptop } from 'lucide-react'
+import { Search, LayoutGrid, Laptop } from 'lucide-react'
 import LogoutButton from './logout'
 import CartDropdown from './CartDropdown'
 import { getToken } from '@/lib/session'
@@ -11,31 +11,29 @@ const Navbar = async () => {
   return (
     <nav className='flex items-center justify-between px-8 py-4 shadow-sm  bg-slate-900 text-slate-100 font-sans'>
       <div className='flex items-center justify-start gap-6'>
-        <Image
-          className='rounded object-cover'
-          src='/logo.webp'
-          width={140}
-          height={70}
-          alt='logo'
-        />
+        <Link
+          href='/'
+          className='text-white hover:text-blue-700 flex items-center gap-0.5 transition-colors'
+        >
+          <Image
+            className='rounded object-cover'
+            src='/logo.webp'
+            width={140}
+            height={70}
+            alt='logo'
+          />
+        </Link>
         <div className='flex items-center gap-6 font-medium text-sm'>
           <Link
-            href='/products'
-            className='hover:text-white flex items-center gap-2 transition-colors'
-          >
-            <Box className='inline w-4 h-4 mr-1' />
-            Products
-          </Link>
-          <Link
             href='/categories'
-            className='hover:text-white flex items-center gap-2 transition-colors'
+            className='text-white hover:text-blue-700 flex items-center gap-0.5 transition-colors'
           >
             <LayoutGrid className='inline w-4 h-4 mr-1' />
             Categories
           </Link>
           <Link
             href='/dashboard'
-            className='hover:text-white flex items-center gap-2 transition-colors'
+            className='text-white hover:text-blue-700 flex items-center gap-0.5 transition-colors'
           >
             <Laptop className='inline w-4 h-4 mr-1' />
             Dashboard

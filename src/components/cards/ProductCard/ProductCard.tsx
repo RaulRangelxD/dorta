@@ -1,15 +1,16 @@
 'use client'
 
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Product } from '@/utils/types'
-import { Edit, ShoppingCart, Trash2 } from 'lucide-react'
+import { Edit, Package, ShoppingCart, Trash2 } from 'lucide-react'
 import {
   ProductCardContext,
   useProductCardContext,
 } from '@/components/cards/ProductCard/ProductCardContext'
 import { useCart } from '@/context/CartContext'
+import { motion } from 'framer-motion'
 
 type ProductCardProps = {
   product: Product
@@ -17,6 +18,12 @@ type ProductCardProps = {
   info?: ReactNode
   action?: ReactNode
   size?: string
+  layout?: 'grid' | 'list'
+}
+
+const itemVars = {
+  hidden: { y: 20, opacity: 0 },
+  visible: { y: 0, opacity: 1 },
 }
 
 export const ProductCard = ({
@@ -24,86 +31,146 @@ export const ProductCard = ({
   image,
   info,
   action,
-  size,
+  layout = 'grid',
 }: ProductCardProps) => {
+  const isList = layout === 'list'
+
   return (
-    <ProductCardContext.Provider value={{ product }}>
-      <div
-        className={`${
-          size ? size : 'w-full'
-        } rounded border bg-gray-500/15 border-gray-500/30 shadow-sm overflow-hidden group`}
+    <ProductCardContext.Provider value={{ product, layout }}>
+      <motion.div
+        variants={itemVars}
+        className={`group bg-slate-900 border border-slate-800 rounded-2xl
+          hover:border-blue-500/50 transition-all overflow-hidden
+          ${isList ? 'flex flex-row items-stretch w-full' : 'flex flex-col w-48'}
+        `}
       >
         {image}
-        <div className='p-4'>
-          {info}
-          {action}
+        <div className={`p-4 ${isList ? 'flex-1 flex items-center' : ''}`}>
+          <div className='w-full'>
+            {info}
+            {action}
+          </div>
         </div>
-      </div>
+      </motion.div>
     </ProductCardContext.Provider>
   )
 }
 
 const ProductImage = () => {
-  const { product } = useProductCardContext()
-
-  const imageUrl = product.img?.startsWith('http')
-    ? product.img
-    : '/placeholder.webp'
+  const { product, layout } = useProductCardContext()
+  const isList = layout === 'list'
 
   return (
-    <div className='relative w-64 h-64 overflow-hidden'>
-      <Image
-        src={imageUrl}
-        alt={product.name}
-        fill
-        className='object-cover transition-transform duration-300 group-hover:scale-105'
-      />
+    <div
+      className={`
+        relative flex items-center justify-center overflow-hidden
+        ${
+          isList
+            ? 'w-32 min-h-32 border-r border-slate-800 group-hover:border-blue-500/50'
+            : 'w-full h-48 border-b border-slate-800 group-hover:border-blue-500/50'
+        }
+      `}
+    >
+      {product.img?.startsWith('http') ? (
+        <Image
+          src={product.img}
+          alt={product.name}
+          fill
+          sizes={isList ? '128px' : '(min-width: 768px) 25vw, 100vw'}
+          className='object-cover group-hover:scale-105 transition-transform'
+        />
+      ) : (
+        <Package
+          size={isList ? 32 : 48}
+          className='text-slate-700 group-hover:text-blue-500'
+        />
+      )}
     </div>
   )
 }
 
 const ProductName = () => {
   const { product } = useProductCardContext()
-  return <h3 className={`text-sm font-medium mb-1 `}>{product.name}</h3>
+  return <h3 className={`text-sm font-medium`}>{product.name}</h3>
 }
 
 const ProductPrice = () => {
   const { product } = useProductCardContext()
-  return <p className={`text-md font-bold mb-3 `}>${product.price}</p>
+  return <p className={`text-md font-bold`}>${product.price}</p>
 }
 
 const ProductCategory = () => {
   const { product } = useProductCardContext()
-  return <p className={`text-md font-bold mb-3 `}>${product.category.name}</p>
+  return <p className={`text-md font-bold`}>${product.category.name}</p>
 }
 
 const ProductInfo = ({ children }: { children: ReactNode }) => {
-  return <div className='flex flex-col space-y-0.5 items-start'>{children}</div>
+  const { layout } = useProductCardContext()
+
+  return (
+    <div
+      className={`flex gap-2 ${
+        layout === 'list'
+          ? 'flex-row justify-between items-center'
+          : 'flex-col items-start'
+      }`}
+    >
+      {children}
+    </div>
+  )
+}
+
+const ProductInfoList = ({ children }: { children: ReactNode }) => {
+  const { layout } = useProductCardContext()
+
+  return (
+    <div
+      className={`w-full flex gap-2 ${
+        layout === 'list'
+          ? 'flex-col items-start justify-center'
+          : 'flex-row justify-between items-center'
+      }`}
+    >
+      {children}
+    </div>
+  )
 }
 
 const ProductAction = () => {
   const { product } = useProductCardContext()
   const { addProduct } = useCart()
 
+  const [added, setAdded] = useState(false)
+
   const handleAddToCart = async () => {
     try {
       await addProduct(product.id, 1)
-      alert(`Producto "${product.name}" añadido al carrito`)
+      setAdded(true)
+      setTimeout(() => setAdded(false), 500)
     } catch (error) {
-      console.error('Error adding to cart:', error)
-      alert('No se pudo añadir el producto al carrito')
+      console.error(error)
     }
   }
 
   return (
-    <div className='w-full flex justify-between items-center mt-2'>
-      <p className={`text-md font-bold `}>${product.price}</p>
-      <button
+    <div className='flex justify-between items-center'>
+      <motion.button
         onClick={handleAddToCart}
-        className='flex gap-2 px-2 py-1 justify-center items-center bg-blue-700 rounded font-medium hover:bg-blue-800 transition-colors'
+        className='relative flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
+        whileTap={{ scale: 0.9 }}
       >
-        <ShoppingCart className='w-4 h-4' />
-      </button>
+        <motion.span
+          animate={
+            added
+              ? { scale: [1, 1.4, 1], rotate: [0, -15, 15, 0] }
+              : { scale: 1 }
+          }
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className={added ? 'text-green-400' : 'text-blue-500'}
+        >
+          <ShoppingCart className='w-4 h-4' />
+        </motion.span>
+      </motion.button>
     </div>
   )
 }
@@ -138,6 +205,7 @@ ProductCard.Name = ProductName
 ProductCard.Price = ProductPrice
 ProductCard.Category = ProductCategory
 ProductCard.Info = ProductInfo
+ProductCard.InfoList = ProductInfoList
 ProductCard.Image = ProductImage
 ProductCard.Action = ProductAction
 ProductCard.AdminAction = ProductAdminAction
