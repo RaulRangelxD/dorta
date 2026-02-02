@@ -32,7 +32,7 @@ const Navbar = async () => {
             Categories
           </Link>
           <Link
-            href='/dashboard'
+            href='/admin'
             className='text-white hover:text-blue-500 flex items-center gap-0.5 transition-colors'
           >
             <Laptop className='inline w-4 h-4 mr-1' />

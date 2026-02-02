@@ -1,6 +1,9 @@
 'use client'
 
+import { motion } from 'framer-motion'
+import { ChevronLeft } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useState, ChangeEvent, FormEvent } from 'react'
 
 type ProductFormData = {
@@ -25,6 +28,7 @@ export default function ProductForm() {
   const [image, setImage] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -84,93 +88,116 @@ export default function ProductForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className='max-w-lg space-y-4 rounded border p-4'
-    >
-      <h2 className='text-xl font-semibold'>Create product</h2>
+    <div className='min-h-screen bg-slate-950 text-white flex justify-center px-6 py-12'>
+      <div className='w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6'>
+        <div className='grid grid-cols-3 justify-between'>
+          <motion.button
+            onClick={() => router.back()}
+            className='flex items-center gap-2 text-slate-500 hover:text-blue-500 transition-colors text-sm font-medium'
+            whileTap={{ scale: 0.9 }}
+          >
+            <ChevronLeft size={18} /> Back
+          </motion.button>
+          <h2 className='text-xl font-semibold text-center'>Create product</h2>
+        </div>
+        <form
+          onSubmit={handleSubmit}
+          className='w-full max-w-3xl bg-slate-900 rounded-2xl p-6 space-y-6'
+        >
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <input
+              name='name'
+              placeholder='Product name'
+              value={form.name}
+              onChange={handleChange}
+              className='input'
+              required
+            />
 
-      <input
-        name='name'
-        placeholder='Name'
-        value={form.name}
-        onChange={handleChange}
-        required
-        className='w-full rounded border p-2'
-      />
+            <input
+              name='reference'
+              placeholder='Reference'
+              value={form.reference}
+              onChange={handleChange}
+              className='input'
+              required
+            />
 
-      <textarea
-        name='description'
-        placeholder='Description'
-        value={form.description}
-        onChange={handleChange}
-        required
-        className='w-full rounded border p-2'
-      />
+            <input
+              name='price'
+              type='number'
+              step='0.01'
+              placeholder='Price'
+              value={form.price}
+              onChange={handleChange}
+              className='input'
+              required
+            />
 
-      <input
-        name='price'
-        type='number'
-        step='0.01'
-        placeholder='Price'
-        value={form.price}
-        onChange={handleChange}
-        required
-        className='w-full rounded border p-2'
-      />
+            <input
+              name='stock'
+              type='number'
+              placeholder='Stock'
+              value={form.stock}
+              onChange={handleChange}
+              className='input'
+              required
+            />
 
-      <input
-        name='reference'
-        placeholder='Reference'
-        value={form.reference}
-        onChange={handleChange}
-        required
-        className='w-full rounded border p-2'
-      />
+            <input
+              name='categoryId'
+              type='number'
+              placeholder='Category ID'
+              value={form.categoryId}
+              onChange={handleChange}
+              className='input'
+              required
+            />
+          </div>
 
-      <input
-        name='stock'
-        type='number'
-        placeholder='Stock'
-        value={form.stock}
-        onChange={handleChange}
-        required
-        className='w-full rounded border p-2'
-      />
+          <textarea
+            name='description'
+            placeholder='Description'
+            value={form.description}
+            onChange={handleChange}
+            rows={4}
+            className='input'
+            required
+          />
 
-      <input
-        name='categoryId'
-        type='number'
-        placeholder='Category ID'
-        value={form.categoryId}
-        onChange={handleChange}
-        required
-        className='w-full rounded border p-2'
-      />
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+            <label className='flex flex-col gap-2 text-sm text-slate-400'>
+              Product image
+              <input
+                type='file'
+                accept='image/*'
+                onChange={handleImageChange}
+                className='file'
+                required
+              />
+            </label>
 
-      <input
-        type='file'
-        accept='image/*'
-        onChange={handleImageChange}
-        required
-      />
+            {preview && (
+              <Image
+                src={preview}
+                alt='Preview'
+                width={400}
+                height={400}
+                className='h-48 w-full rounded-xl object-cover border border-slate-800'
+              />
+            )}
+          </div>
 
-      {preview && (
-        <Image
-          src={preview}
-          alt='Preview'
-          width={192}
-          height={192}
-          className='h-48 w-full rounded object-cover'
-        />
-      )}
-
-      <button
-        disabled={loading}
-        className='w-full rounded bg-black py-2 text-white disabled:opacity-50'
-      >
-        {loading ? 'Uploading...' : 'Create product'}
-      </button>
-    </form>
+          <footer className='flex justify-end pt-4'>
+            <button
+              disabled={loading}
+              className='px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 transition disabled:opacity-50'
+            >
+              {loading ? 'Uploading...' : 'Create product'}
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
   )
 }

@@ -104,96 +104,112 @@ export default function ProductEditForm() {
     }
 
     alert('Product updated')
-    router.push('/admin/products')
+    router.push('/admin')
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className='max-w-lg space-y-4 rounded border p-4'
-    >
-      <h2 className='text-xl font-semibold'>Edit product</h2>
-
-      <input
-        name='name'
-        value={form.name}
-        onChange={handleChange}
-        required
-        className='w-full rounded border p-2'
-      />
-
-      <textarea
-        name='description'
-        value={form.description}
-        onChange={handleChange}
-        required
-        className='w-full rounded border p-2'
-      />
-
-      <input
-        name='price'
-        type='number'
-        step='0.01'
-        value={form.price}
-        onChange={handleChange}
-        required
-        className='w-full rounded border p-2'
-      />
-
-      <input
-        name='reference'
-        value={form.reference}
-        onChange={handleChange}
-        required
-        className='w-full rounded border p-2'
-      />
-
-      <input
-        name='stock'
-        type='number'
-        value={form.stock}
-        onChange={handleChange}
-        required
-        className='w-full rounded border p-2'
-      />
-
-      <input
-        name='categoryId'
-        type='number'
-        value={form.categoryId}
-        onChange={handleChange}
-        required
-        className='w-full rounded border p-2'
-      />
-
-      {currentImage && !preview && (
-        <Image
-          src={currentImage}
-          alt='Current image'
-          width={192}
-          height={192}
-          className='h-48 w-full rounded object-cover'
-        />
-      )}
-
-      {preview && (
-        <Image
-          src={preview}
-          alt='Preview'
-          width={192}
-          height={192}
-          className='h-48 w-full rounded object-cover'
-        />
-      )}
-
-      <input type='file' accept='image/*' onChange={handleImageChange} />
-
-      <button
-        disabled={loading}
-        className='w-full rounded bg-black py-2 text-white disabled:opacity-50'
+    <div className='min-h-screen bg-slate-950 text-white flex justify-center px-6 py-12'>
+      <form
+        onSubmit={handleSubmit}
+        className='w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6'
       >
-        {loading ? 'Saving...' : 'Update product'}
-      </button>
-    </form>
+        <header className='flex justify-between items-center'>
+          <h2 className='text-xl font-semibold'>Edit product</h2>
+        </header>
+
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+          <input
+            name='name'
+            value={form.name}
+            onChange={handleChange}
+            className='input'
+            required
+          />
+          <input
+            name='reference'
+            value={form.reference}
+            onChange={handleChange}
+            className='input'
+            required
+          />
+          <input
+            name='price'
+            type='number'
+            value={form.price}
+            onChange={handleChange}
+            className='input'
+            required
+          />
+          <input
+            name='stock'
+            type='number'
+            value={form.stock}
+            onChange={handleChange}
+            className='input'
+            required
+          />
+          <input
+            name='categoryId'
+            type='number'
+            value={form.categoryId}
+            onChange={handleChange}
+            className='input'
+            required
+          />
+        </div>
+
+        <textarea
+          name='description'
+          value={form.description}
+          onChange={handleChange}
+          rows={4}
+          className='input'
+          required
+        />
+
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          <div className='space-y-2'>
+            <p className='text-sm text-slate-400'>Current image</p>
+
+            {(preview || currentImage) && (
+              <Image
+                src={preview || currentImage!}
+                alt='Product image'
+                width={400}
+                height={400}
+                className='h-48 w-full rounded-xl object-cover border border-slate-800'
+              />
+            )}
+          </div>
+
+          <label className='flex flex-col gap-2 text-sm text-slate-400'>
+            Replace image
+            <input
+              type='file'
+              accept='image/*'
+              onChange={handleImageChange}
+              className='file'
+            />
+          </label>
+        </div>
+
+        <footer className='flex justify-between pt-4'>
+          <button
+            type='button'
+            onClick={() => router.back()}
+            className='text-slate-400 hover:text-blue-500'
+          >
+            Cancel
+          </button>
+
+          <button
+            disabled={loading}
+            className='px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 transition disabled:opacity-50'
+          >
+            {loading ? 'Saving...' : 'Update product'}
+          </button>
+        </footer>
+      </form>
+    </div>
   )
 }

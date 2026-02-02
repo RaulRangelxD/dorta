@@ -69,3 +69,11 @@ html::-webkit-scrollbar-thumb {
 html::-webkit-scrollbar-thumb:hover {
   opacity: 0.8; /* efecto hover */
 }
+
+.input {
+  @apply w-full rounded-xl bg-slate-950 border border-slate-800 hover:border-blue-500 px-3 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.file {
+  @apply text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-slate-800 file:px-4 file:py-2 file:text-white hover:file:bg-slate-700;
+}

@@ -180,23 +180,25 @@ const ProductAdminAction = () => {
   const router = useRouter()
 
   return (
-    <div className='flex gap-2 mt-4'>
-      <button
-        onClick={() => router.push(`/admin/edit/${product.id}`)}
-        className='p-2 border rounded hover:bg-gray-100 transition-colors'
+    <div className='flex justify-between items-center gap-2'>
+      <motion.button
+        onClick={() => router.push(`/admin/products/edit/${product.id}`)}
+        className='flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
+        whileTap={{ scale: 0.9 }}
       >
-        <Edit size={18} />
-      </button>
-      <button
+        <Edit className='text-yellow-500' size={18} />
+      </motion.button>
+      <motion.button
         onClick={() => {
           if (confirm('¿Eliminar producto?')) {
-            router.push(`/admin/delete/${product.id}`)
+            router.push(`/admin/products/delete/${product.id}`)
           }
         }}
-        className='p-2 border border-red-200 text-red-600 rounded hover:bg-red-50 transition-colors'
+        className='flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
+        whileTap={{ scale: 0.9 }}
       >
-        <Trash2 size={18} />
-      </button>
+        <Trash2 className='text-red-500' size={18} />
+      </motion.button>
     </div>
   )
 }
