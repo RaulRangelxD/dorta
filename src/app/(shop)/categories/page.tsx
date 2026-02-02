@@ -1,7 +1,7 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import {
   ChevronLeft,
   Package,
@@ -11,63 +11,73 @@ import {
   Wind,
   Cpu,
   Sparkles,
-} from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import Link from 'next/link';
+  LucideIcon,
+} from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import Link from 'next/link'
 
-// 1. DEFINICIÓN DE INTERFACES (Para que no salga error en 'Category')
-interface Category {
-  id: number;
-  name: string;
-  department: string;
-  description: string | null;
-  image: string | null;
-  products: any[];
+interface Product {
+  id: number
+  name: string
+  [key: string]: unknown
 }
 
-// 2. ANIMACIONES (Para corregir 'containerVars' e 'itemVars')
+interface Category {
+  id: number
+  name: string
+  department: string
+  description: string | null
+  image: string | null
+  products: Product[]
+}
+
+interface Department {
+  name: string
+  icon: LucideIcon
+}
+
 const containerVars = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: { staggerChildren: 0.1 },
   },
-};
+}
 
 const itemVars = {
   hidden: { y: 20, opacity: 0 },
   visible: { y: 0, opacity: 1 },
-};
+}
 
 export default function CategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeDept, setActiveDept] = useState('Major Appliances');
-  const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [activeDept, setActiveDept] = useState<string>('Major Appliances')
+  const router = useRouter()
 
-  const departments = [
+  const departments: Department[] = [
     { name: 'Major Appliances', icon: Refrigerator },
     { name: 'Tools & Repair', icon: Wrench },
     { name: 'Climate Control', icon: Wind },
     { name: 'Electronics', icon: Cpu },
     { name: 'Care & Cleaning', icon: Sparkles },
-  ];
+  ]
 
   useEffect(() => {
     async function fetchCats() {
       try {
-        const res = await fetch('/api/categories');
-        const data = await res.json();
-        setCategories(data);
+        const res = await fetch('/api/categories')
+        const data: Category[] = await res.json()
+        setCategories(data)
       } catch (err) {
-        console.error('Error:', err);
+        console.error('Error:', err)
       } finally {
-        setTimeout(() => setIsLoading(false), 800);
+        setTimeout(() => setIsLoading(false), 800)
       }
     }
-    fetchCats();
-  }, []);
+    fetchCats()
+  }, [])
 
   const renderSkeletons = () => (
     <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'>
@@ -84,12 +94,11 @@ export default function CategoriesPage() {
         </div>
       ))}
     </div>
-  );
+  )
 
-  // 3. FILTRADO (Asegúrate de que 'cat.department' no sea undefined)
   const filteredCategories = categories.filter(
     (cat) => (cat.department || 'Major Appliances') === activeDept,
-  );
+  )
 
   return (
     <div className='min-h-screen bg-[#020817] text-white'>
@@ -120,8 +129,8 @@ export default function CategoriesPage() {
               </h3>
               <nav className='space-y-2'>
                 {departments.map((dept) => {
-                  const Icon = dept.icon;
-                  const isActive = activeDept === dept.name;
+                  const Icon = dept.icon
+                  const isActive = activeDept === dept.name
                   return (
                     <button
                       key={dept.name}
@@ -134,7 +143,7 @@ export default function CategoriesPage() {
                     >
                       <Icon size={18} /> {dept.name}
                     </button>
-                  );
+                  )
                 })}
               </nav>
             </div>
@@ -155,7 +164,7 @@ export default function CategoriesPage() {
                   <motion.div
                     key={cat.id}
                     variants={itemVars}
-                    className='group bg-[#0b1120] border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all'
+                    className='group bg-[#0b1120] border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-[0_0_30px_-5px_rgba(37,106,244,0.3)] transition-all duration-300'
                   >
                     <div className='h-48 bg-[#020817] relative flex items-center justify-center border-b border-slate-800/50'>
                       {cat.image ? (
@@ -163,14 +172,14 @@ export default function CategoriesPage() {
                           src={cat.image}
                           alt={cat.name}
                           fill
-                          className='object-cover group-hover:scale-105 transition-transform'
+                          className='object-cover group-hover:scale-105 transition-transform duration-500'
                         />
                       ) : (
                         <Package size={48} className='text-slate-800' />
                       )}
                     </div>
                     <div className='p-6'>
-                      <h3 className='text-xl font-bold text-white mb-2'>
+                      <h3 className='text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors'>
                         {cat.name}
                       </h3>
                       <p className='text-slate-500 text-sm mb-6'>
@@ -178,7 +187,7 @@ export default function CategoriesPage() {
                       </p>
                       <Link
                         href={`/categories/${cat.id}`}
-                        className='flex items-center justify-between w-full py-3 px-5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-all'
+                        className='flex items-center justify-between w-full py-3 px-5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-900/20'
                       >
                         View Parts <ArrowRight size={16} />
                       </Link>
@@ -197,5 +206,5 @@ export default function CategoriesPage() {
         </div>
       </main>
     </div>
-  );
+  )
 }
