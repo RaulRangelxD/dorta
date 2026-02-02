@@ -1,11 +1,15 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Search, LayoutGrid, Laptop } from 'lucide-react'
-import LogoutButton from './logout'
 import CartDropdown from './CartDropdown'
 import { getToken } from '@/lib/session'
+import UserDropdown from './UserDropdown'
 
-const Navbar = async () => {
+type NavbarProps = {
+  admin?: boolean
+}
+
+const Navbar = async ({ admin = false }: NavbarProps) => {
   const token = await getToken()
 
   return (
@@ -24,20 +28,34 @@ const Navbar = async () => {
           />
         </Link>
         <div className='flex items-center gap-6 font-medium text-sm'>
-          <Link
-            href='/categories'
-            className='text-white hover:text-blue-500 flex items-center gap-0.5 transition-colors'
-          >
-            <LayoutGrid className='inline w-4 h-4 mr-1' />
-            Categories
-          </Link>
-          <Link
-            href='/admin'
-            className='text-white hover:text-blue-500 flex items-center gap-0.5 transition-colors'
-          >
-            <Laptop className='inline w-4 h-4 mr-1' />
-            Dashboard
-          </Link>
+          {admin ? (
+            <>
+              <Link
+                href='/admin/categories'
+                className='text-white hover:text-blue-500 flex items-center gap-0.5 transition-colors'
+              >
+                <LayoutGrid className='inline w-4 h-4 mr-1' />
+                Categories
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                href='/categories'
+                className='text-white hover:text-blue-500 flex items-center gap-0.5 transition-colors'
+              >
+                <LayoutGrid className='inline w-4 h-4 mr-1' />
+                Categories
+              </Link>
+              <Link
+                href='/admin'
+                className='text-white hover:text-blue-500 flex items-center gap-0.5 transition-colors'
+              >
+                <Laptop className='inline w-4 h-4 mr-1' />
+                Dashboard
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
@@ -67,17 +85,7 @@ const Navbar = async () => {
             </Link>
           </div>
         ) : (
-          <div className='flex items-center gap-4 border border-slate-800 bg-slate-900/50 rounded-2xl ps-4'>
-            Admin
-            <Image
-              className='rounded-full border border-gray-500/15 object-cover'
-              src='/profile.jpg'
-              width={40}
-              height={40}
-              alt='profile'
-            />
-            <LogoutButton />
-          </div>
+          <UserDropdown />
         )}
 
         <CartDropdown />

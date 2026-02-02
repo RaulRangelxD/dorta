@@ -46,7 +46,7 @@ const CartDropdown = () => {
           size={24}
           className='text-white group-hover:scale-105 transition-all'
         />
-        <span className='absolute -top-2 -right-2 bg-blue-500 text-white group-hover:scale-110 text-[10px] rounded-full w-4 h-4 flex items-center justify-center transition-all'>
+        <span className='absolute -top-2 -right-2 bg-blue-500 text-white group-hover:scale-110 text-[10px] rounded-full w-4 h-4 flex items-center justify-center transition-all select-none'>
           {totalItems}
         </span>
       </motion.div>

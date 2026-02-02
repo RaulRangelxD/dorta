@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <CartProvider>
           <header>
-            <Navbar />
+            <Navbar admin />
           </header>
           <main className='min-h-screen pt-16 bg-slate-950'>{children}</main>
           <footer></footer>
