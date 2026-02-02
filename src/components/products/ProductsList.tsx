@@ -62,7 +62,7 @@ export function ProductList({ endpoint, mode = 'shop' }: Props) {
             className={`z-10 p-2 transition-colors ${
               viewMode === 'list'
                 ? 'text-white hover:text-blue-500'
-                : 'text-slate-400 hover:text-blue-500'
+                : 'text-slate-500 hover:text-blue-500'
             }`}
             aria-label='List view'
           >
@@ -73,7 +73,7 @@ export function ProductList({ endpoint, mode = 'shop' }: Props) {
             className={`z-10 p-2 transition-colors ${
               viewMode === 'grid'
                 ? 'text-white hover:text-blue-500'
-                : 'text-slate-400 hover:text-blue-500'
+                : 'text-slate-500 hover:text-blue-500'
             }`}
             aria-label='Grid view'
           >
@@ -86,10 +86,13 @@ export function ProductList({ endpoint, mode = 'shop' }: Props) {
               onClick={() => {
                 router.push(`/admin/products/new`)
               }}
-              className='flex gap-2 px-3 py-2 justify-center items-center bg-slate-900 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
+              className='group/button flex gap-2 px-3 py-2 justify-center items-center bg-slate-900 border border-slate-800 hover:border-green-500/50 rounded transition-colors'
               whileTap={{ scale: 0.9 }}
             >
-              <Plus className='text-green-500' size={18} />
+              <Plus
+                className='text-slate-500 group-hover/button:text-green-500'
+                size={18}
+              />
             </motion.button>
             <motion.button
               onClick={() => router.back()}
@@ -124,7 +127,9 @@ export function ProductList({ endpoint, mode = 'shop' }: Props) {
                 viewMode === 'list' ? (
                   <ProductCard.Info>
                     <ProductCard.InfoList>
+                      <ProductCard.Deparment />
                       <ProductCard.Name />
+                      <ProductCard.Category />
                       <ProductCard.Price />
                     </ProductCard.InfoList>
                     {mode === 'admin' ? (
@@ -135,7 +140,9 @@ export function ProductList({ endpoint, mode = 'shop' }: Props) {
                   </ProductCard.Info>
                 ) : (
                   <ProductCard.Info>
+                    <ProductCard.Deparment />
                     <ProductCard.Name />
+                    <ProductCard.Category />
                     <ProductCard.InfoList>
                       <ProductCard.Price />
                       {mode === 'admin' ? (

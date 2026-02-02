@@ -4,6 +4,7 @@ import { Search, LayoutGrid, Laptop } from 'lucide-react'
 import CartDropdown from './CartDropdown'
 import { getToken } from '@/lib/session'
 import UserDropdown from './UserDropdown'
+import MenuDropdown from './MenuDropdown'
 
 type NavbarProps = {
   admin?: boolean
@@ -14,6 +15,9 @@ const Navbar = async ({ admin = false }: NavbarProps) => {
 
   return (
     <nav className='w-full fixed z-50 flex items-center justify-between px-8 py-4 shadow-sm  bg-slate-900 text-slate-100 font-sans'>
+      <div className='lg:hidden'>
+        <MenuDropdown admin={admin} />
+      </div>
       <div className='flex items-center justify-start gap-6'>
         <Link
           href='/'
@@ -27,7 +31,7 @@ const Navbar = async ({ admin = false }: NavbarProps) => {
             alt='logo'
           />
         </Link>
-        <div className='flex items-center gap-6 font-medium text-sm'>
+        <div className='hidden lg:flex items-center gap-6 font-medium text-sm'>
           {admin ? (
             <>
               <Link
@@ -60,7 +64,7 @@ const Navbar = async ({ admin = false }: NavbarProps) => {
       </div>
 
       <div className='flex items-center gap-6 font-medium'>
-        <div className='relative'>
+        <div className='hidden lg:flex relative'>
           <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4' />
           <input
             type='text'

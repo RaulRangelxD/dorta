@@ -14,6 +14,9 @@ export interface Product {
   category: {
     id: number
     name: string
+    department: string
+    description: string
+    image: string
   }
 
   createdAt: string

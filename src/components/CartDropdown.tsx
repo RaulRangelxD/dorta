@@ -82,7 +82,7 @@ const CartDropdown = () => {
                         onClick={() =>
                           decreaseQuantity(item.product.id, item.quantity)
                         }
-                        className='relative flex gap-2 px-2 py-1 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
+                        className='group/button relative flex gap-2 px-2 py-1 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
                         whileTap={{ scale: 0.9 }}
                       >
                         <motion.span
@@ -95,8 +95,8 @@ const CartDropdown = () => {
                           onAnimationComplete={() => setDecId(null)}
                           className={
                             decId === item.product.id
-                              ? 'text-green-400'
-                              : 'text-blue-500'
+                              ? 'text-green-400 transition-colors'
+                              : 'text-slate-500 group-hover/button:text-blue-500 transition-colors'
                           }
                         >
                           <Minus size={16} />
@@ -105,7 +105,7 @@ const CartDropdown = () => {
                       <span className='px-2'>{item.quantity}</span>
                       <motion.button
                         onClick={() => increaseQuantity(item.product.id)}
-                        className='relative flex gap-2 px-2 py-1 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
+                        className='group/button relative flex gap-2 px-2 py-1 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
                         whileTap={{ scale: 0.9 }}
                       >
                         <motion.span
@@ -118,8 +118,8 @@ const CartDropdown = () => {
                           onAnimationComplete={() => setIncId(null)}
                           className={
                             incId === item.product.id
-                              ? 'text-green-400'
-                              : 'text-blue-500'
+                              ? 'text-green-400 transition-colors'
+                              : 'text-slate-500 group-hover/button:text-blue-500 transition-colors'
                           }
                         >
                           <Plus size={16} />
@@ -134,9 +134,12 @@ const CartDropdown = () => {
                   <motion.button
                     onClick={() => deleteProduct(item.product.id)}
                     whileTap={{ scale: 0.9 }}
-                    className='relative flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-red-500/50 rounded transition-colors'
+                    className='group/button relative flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-red-500/50 rounded transition-colors'
                   >
-                    <X className='text-red-500' size={16} />
+                    <X
+                      className='text-slate-500 group-hover/button:text-red-500 transition-colors'
+                      size={16}
+                    />
                   </motion.button>
                 </div>
               ))}
@@ -150,19 +153,25 @@ const CartDropdown = () => {
                 <motion.button
                   onClick={clearCart}
                   whileTap={{ scale: 0.9 }}
-                  className='relative px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-red-500/50 rounded transition-colors'
+                  className='group/button relative px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-red-500/50 rounded transition-colors'
                 >
-                  <ShoppingCart className='text-red-500' size={16} />
-                  <span className='absolute -top-0.5 text-red-500 text-[10px] rounded-full w-4 h-4 flex items-center justify-center'>
+                  <ShoppingCart
+                    className='text-slate-500 group-hover/button:text-red-500 transition-colors'
+                    size={16}
+                  />
+                  <span className='absolute -top-0.5 text-slate-500 group-hover/button:text-red-500 transition-colors text-[10px] rounded-full w-4 h-4 flex items-center justify-center'>
                     x
                   </span>
                 </motion.button>
                 <motion.button
                   onClick={clearCart}
                   whileTap={{ scale: 0.9 }}
-                  className=' px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-green-500/50 rounded transition-colors'
+                  className='group/button px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-green-500/50 rounded transition-colors'
                 >
-                  <Banknote className='text-green-500' size={16} />
+                  <Banknote
+                    className='text-slate-500 group-hover/button:text-green-500'
+                    size={16}
+                  />
                 </motion.button>
               </div>
             </>

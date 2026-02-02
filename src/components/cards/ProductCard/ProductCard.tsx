@@ -59,11 +59,13 @@ export const ProductCard = ({
 const ProductImage = () => {
   const { product, layout } = useProductCardContext()
   const isList = layout === 'list'
+  const router = useRouter()
 
   return (
     <div
+      onClick={() => router.push(`/products/${product.id}`)}
       className={`
-        relative flex items-center justify-center overflow-hidden
+        relative flex items-center justify-center overflow-hidden cursor-pointer hover:bg-slate-800
         ${
           isList
             ? 'w-32 min-h-32 border-r border-slate-800 group-hover:border-blue-500/50'
@@ -90,8 +92,17 @@ const ProductImage = () => {
 }
 
 const ProductName = () => {
+  const router = useRouter()
+
   const { product } = useProductCardContext()
-  return <h3 className={`text-sm font-medium`}>{product.name}</h3>
+  return (
+    <h3
+      onClick={() => router.push(`/products/${product.id}`)}
+      className={`text-lg font-bold cursor-pointer hover:text-blue-500 transition-colors`}
+    >
+      {product.name}
+    </h3>
+  )
 }
 
 const ProductPrice = () => {
@@ -100,8 +111,29 @@ const ProductPrice = () => {
 }
 
 const ProductCategory = () => {
+  const router = useRouter()
   const { product } = useProductCardContext()
-  return <p className={`text-md font-bold`}>${product.category.name}</p>
+  return (
+    <p
+      onClick={() => router.push(`/categories/${product.category.id}`)}
+      className={`text-sm font-bold cursor-pointer text-slate-500 hover:text-blue-500 transition-colors select-none`}
+    >
+      {product.category.name}
+    </p>
+  )
+}
+
+const ProductDepartment = () => {
+  const router = useRouter()
+  const { product } = useProductCardContext()
+  return (
+    <p
+      onClick={() => router.push(`/categories`)}
+      className={`text-xs font-bold cursor-pointer rounded-lg py-0.5 px-1 border border-slate-500 hover:border-blue-500 text-slate-500 hover:text-blue-500 bg-blue-500/10 transition-colors select-none`}
+    >
+      {product.category.department}
+    </p>
+  )
 }
 
 const ProductInfo = ({ children }: { children: ReactNode }) => {
@@ -156,7 +188,7 @@ const ProductAction = () => {
     <div className='flex justify-between items-center'>
       <motion.button
         onClick={handleAddToCart}
-        className='relative flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
+        className='group/button relative flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
         whileTap={{ scale: 0.9 }}
       >
         <motion.span
@@ -166,7 +198,11 @@ const ProductAction = () => {
               : { scale: 1 }
           }
           transition={{ duration: 0.4, ease: 'easeOut' }}
-          className={added ? 'text-green-400' : 'text-blue-500'}
+          className={
+            added
+              ? 'text-green-500 transition-colors'
+              : 'text-slate-500 group-hover/button:text-blue-500 transition-colors'
+          }
         >
           <ShoppingCart className='w-4 h-4' />
         </motion.span>
@@ -183,10 +219,13 @@ const ProductAdminAction = () => {
     <div className='flex justify-between items-center gap-2'>
       <motion.button
         onClick={() => router.push(`/admin/products/edit/${product.id}`)}
-        className='flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
+        className='group/button flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-yellow-500/50 rounded transition-colors'
         whileTap={{ scale: 0.9 }}
       >
-        <Edit className='text-yellow-500' size={18} />
+        <Edit
+          className='text-slate-500 group-hover/button:text-yellow-500 transition-colors'
+          size={18}
+        />
       </motion.button>
       <motion.button
         onClick={() => {
@@ -194,10 +233,13 @@ const ProductAdminAction = () => {
             router.push(`/admin/products/delete/${product.id}`)
           }
         }}
-        className='flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded transition-colors'
+        className='group/button flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-red-500/50 rounded transition-colors'
         whileTap={{ scale: 0.9 }}
       >
-        <Trash2 className='text-red-500' size={18} />
+        <Trash2
+          className='text-slate-500 group-hover/button:text-red-500'
+          size={18}
+        />
       </motion.button>
     </div>
   )
@@ -206,6 +248,7 @@ const ProductAdminAction = () => {
 ProductCard.Name = ProductName
 ProductCard.Price = ProductPrice
 ProductCard.Category = ProductCategory
+ProductCard.Deparment = ProductDepartment
 ProductCard.Info = ProductInfo
 ProductCard.InfoList = ProductInfoList
 ProductCard.Image = ProductImage
