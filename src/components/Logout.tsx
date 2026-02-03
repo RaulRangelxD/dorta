@@ -1,4 +1,4 @@
-L'use client'
+'use client'
 
 import { useRouter } from 'next/navigation'
 import { logout } from '@/lib/auth'
