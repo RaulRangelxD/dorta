@@ -11,6 +11,7 @@ export async function GET() {
       id: true,
       name: true,
       email: true,
+      role: true,
       createdAt: true,
     }, // never return password
   })
@@ -25,7 +26,7 @@ export async function POST(req: Request) {
   if (!email || !password) {
     return NextResponse.json(
       { error: 'Email and password are required' },
-      { status: 400 }
+      { status: 400 },
     )
   }
 
@@ -36,6 +37,7 @@ export async function POST(req: Request) {
       name,
       email,
       password: hashedPassword,
+      role: 'user',
     },
   })
 

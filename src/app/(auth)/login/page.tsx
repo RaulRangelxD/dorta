@@ -6,8 +6,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Mail, Lock, Loader2, Eye, EyeOff, ChevronLeft } from 'lucide-react'
-import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 const loginSchema = z.object({
@@ -21,15 +21,7 @@ type LoginFormValues = z.infer<typeof loginSchema>
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const [registeredSuccess, setRegisteredSuccess] = useState(false)
   const router = useRouter()
-  const params = useSearchParams()
-
-  useEffect(() => {
-    if (params?.get('registered') === 'success') {
-      setRegisteredSuccess(true)
-    }
-  }, [params])
 
   const {
     register,
@@ -92,12 +84,6 @@ export default function LoginPage() {
           <ChevronLeft className='w-5 h-5' />
           Back
         </button>
-
-        {registeredSuccess && (
-          <div className='mb-4 rounded-lg bg-green-100 text-green-700 px-4 py-3 text-sm font-semibold'>
-            Se ha registrado satisfactoriamente
-          </div>
-        )}
 
         <div className='w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden mt-8 md:mt-0'>
           <div className='p-8 pt-12 flex flex-col items-center'>

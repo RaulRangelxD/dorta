@@ -25,7 +25,7 @@ export default function ForgotPasswordPage() {
     defaultValues: { email: '' },
   })
 
-  const onSubmit = async (data: ForgotPasswordValues) => {
+  const onSubmit = async () => {
     setIsLoading(true)
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000))
@@ -111,7 +111,7 @@ export default function ForgotPasswordPage() {
             ) : (
               <div className='text-center space-y-4 w-full'>
                 <div className='bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 text-green-700 dark:text-green-400 p-4 rounded-lg text-sm font-medium'>
-                  Check your inbox! We've sent an email to your address.
+                  Check your inbox! We&apos;ve sent an email to your address.
                 </div>
                 <button
                   onClick={() => setIsSent(false)}
