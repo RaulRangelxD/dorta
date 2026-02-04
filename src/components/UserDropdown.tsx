@@ -12,10 +12,10 @@ const UserDropdown = () => {
     <div className='relative'>
       <motion.div
         onClick={() => setUserOpen(!userOpen)}
-        className='flex items-center gap-4 border border-slate-800 hover:border-blue-500/50 rounded-full overflow-hidden ps-0 lg:ps-3 cursor-pointer select-none'
+        className='flex flex-row items-center ps-4 gap-4 border border-slate-800 hover:border-blue-500/50 rounded-full overflow-hidden cursor-pointer select-none'
         whileTap={{ scale: 0.9 }}
       >
-        <span className='hidden lg:flex'>Admin</span>
+        <span className='text-slate-200 font-bold text-sm text-end'>Admin</span>
         <Image
           className='rounded-full border border-gray-500/15 object-cover'
           src='/profile.jpg'

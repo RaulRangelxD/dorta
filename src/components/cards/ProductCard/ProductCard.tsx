@@ -41,7 +41,7 @@ export const ProductCard = ({
         variants={itemVars}
         className={`group bg-slate-900 border border-slate-800 rounded-2xl
           hover:border-blue-500/50 transition-all overflow-hidden
-          ${isList ? 'flex flex-row items-stretch w-full' : 'flex flex-col w-48'}
+          ${isList ? 'flex flex-row items-stretch w-full' : 'flex flex-col w-64'}
         `}
       >
         {image}
@@ -69,7 +69,7 @@ const ProductImage = () => {
         ${
           isList
             ? 'w-32 min-h-32 border-r border-slate-800 group-hover:border-blue-500/50'
-            : 'w-full h-48 border-b border-slate-800 group-hover:border-blue-500/50'
+            : 'w-full h-64 border-b border-slate-800 group-hover:border-blue-500/50'
         }
       `}
     >
@@ -98,7 +98,7 @@ const ProductName = () => {
   return (
     <h3
       onClick={() => router.push(`/products/${product.id}`)}
-      className={`text-lg font-bold cursor-pointer hover:text-blue-500 transition-colors`}
+      className={`max-w-full truncate font-bold cursor-pointer hover:text-blue-500 transition-colors`}
     >
       {product.name}
     </h3>

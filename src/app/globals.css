@@ -3,6 +3,9 @@
 
 /* Define tu tema personalizado */
 @theme {
+  --breakpoint-xxxs: 10rem;
+  --breakpoint-xxs: 20rem;
+  --breakpoint-xs: 30rem;
   /*-------------- Colors --------------*/
   --color-background: #ffffff;
   --color-foreground: #171717;

@@ -4,13 +4,16 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Laptop, LayoutGrid, Menu, Search } from 'lucide-react'
 import Link from 'next/link'
+import UserDropdown from './UserDropdown'
 
 type MenuProps = {
   admin?: boolean
+  token?: string | null
 }
 
-const MenuDropdown = ({ admin = false }: MenuProps) => {
+const MenuDropdown = ({ admin = false, token = null }: MenuProps) => {
   const [menuOpen, setMenuOpen] = useState(false)
+  console.log(token)
 
   return (
     <div className='relative'>
@@ -22,7 +25,27 @@ const MenuDropdown = ({ admin = false }: MenuProps) => {
         <Menu size={24} className='text-slate-500 hover:text-blue-500' />
       </motion.div>
       {menuOpen && (
-        <div className='absolute flex flex-col gap-3 left-0 mt-2 bg-slate-900 border border-slate-800 hover:border-blue-500/50 rounded-2xl transition-all shadow-lg z-50 p-4 overflow-y-auto custom-scroll'>
+        <div className='absolute flex flex-col w-[calc(100vw-1rem)] xxs:w-3xs gap-3 left-0 mt-2 bg-slate-900 border border-slate-800 hover:border-blue-500/50 rounded-2xl transition-all shadow-lg z-50 p-4 overflow-y-auto custom-scroll'>
+          {!token ? (
+            <div className='grid grid-cols-2 border border-slate-800 hover:border-blue-500/50 rounded-2xl overflow-hidden'>
+              <Link
+                href='/login'
+                className='px-4 py-2 bg-slate-800 text-white hover:bg-blue-500/75'
+              >
+                Login
+              </Link>
+              <Link
+                href='/register'
+                className='px-4 py-2 bg-slate-800 text-white hover:bg-green-500/75'
+              >
+                Register
+              </Link>
+            </div>
+          ) : (
+            <div className='flex justify-center'>
+              <UserDropdown />
+            </div>
+          )}
           <div className='relative'>
             <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4' />
             <input

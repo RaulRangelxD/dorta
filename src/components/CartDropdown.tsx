@@ -52,7 +52,7 @@ const CartDropdown = () => {
       </motion.div>
 
       {cartOpen && (
-        <div className='absolute max-h-[80vh] right-0 mt-2 w-96 bg-slate-900 border border-slate-800 hover:border-blue-500/50 rounded-2xl transition-all shadow-lg z-50 p-4 overflow-y-auto custom-scroll'>
+        <div className='absolute max-h-[80vh] right-0 mt-2 w-[calc(100vw-2rem)] max-w-md lg:w-md bg-slate-900 border border-slate-800 hover:border-blue-500/50 rounded-2xl transition-all shadow-lg z-50 p-4 overflow-y-auto'>
           {cart?.products.length ? (
             <>
               {cart.products.map((item) => (
@@ -76,7 +76,9 @@ const CartDropdown = () => {
                     )}
                   </div>
                   <div className='flex-1'>
-                    <p className='font-medium'>{item.product.name}</p>
+                    <p className='w-[calc(35vw)] max-w-md xs:w-64 truncate font-medium'>
+                      {item.product.name}
+                    </p>
                     <div className='flex items-center gap-2 mt-1'>
                       <motion.button
                         onClick={() =>
@@ -134,7 +136,7 @@ const CartDropdown = () => {
                   <motion.button
                     onClick={() => deleteProduct(item.product.id)}
                     whileTap={{ scale: 0.9 }}
-                    className='group/button relative flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-red-500/50 rounded transition-colors'
+                    className='group/button relative flex gap-2 px-2 py-1 justify-center items-center bg-slate-800 border border-slate-800 hover:border-red-500/50 rounded transition-colors'
                   >
                     <X
                       className='text-slate-500 group-hover/button:text-red-500 transition-colors'

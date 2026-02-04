@@ -14,9 +14,9 @@ const Navbar = async ({ admin = false }: NavbarProps) => {
   const token = await getToken()
 
   return (
-    <nav className='w-full fixed z-50 flex items-center justify-between px-8 py-4 shadow-sm  bg-slate-900 text-slate-100 font-sans'>
+    <nav className='w-full fixed z-50 flex items-center justify-between ps-2 pe-4 lg:px-8 py-4 shadow-sm bg-slate-900 text-slate-100 font-sans'>
       <div className='lg:hidden'>
-        <MenuDropdown admin={admin} />
+        <MenuDropdown admin={admin} token={token} />
       </div>
       <div className='flex items-center justify-start gap-6'>
         <Link
@@ -74,7 +74,7 @@ const Navbar = async ({ admin = false }: NavbarProps) => {
         </div>
 
         {!token ? (
-          <div className='flex border border-slate-800 hover:border-blue-500/50 rounded-2xl overflow-hidden'>
+          <div className='hidden lg:grid lg:grid-cols-2 border border-slate-800 hover:border-blue-500/50 rounded-2xl overflow-hidden'>
             <Link
               href='/login'
               className='px-4 py-2 bg-slate-800 text-white hover:bg-blue-500/75'
@@ -89,9 +89,10 @@ const Navbar = async ({ admin = false }: NavbarProps) => {
             </Link>
           </div>
         ) : (
-          <UserDropdown />
+          <div className='hidden lg:flex'>
+            <UserDropdown />
+          </div>
         )}
-
         <CartDropdown />
       </div>
     </nav>
