@@ -21,7 +21,7 @@ export default function CategoryDetailPage() {
       try {
         const res = await fetch('/api/categories')
         const categories: Category[] = await res.json()
-        const selected = categories.find(c => c.id === Number(id))
+        const selected = categories.find((c) => c.id === Number(id))
         setCategory(selected || null)
       } finally {
         setLoading(false)
@@ -50,7 +50,7 @@ export default function CategoryDetailPage() {
   }
 
   return (
-    <main className='max-w-6xl mx-auto px-6 mt-12'>
+    <div className='mx-auto px-1 lg:px-4 mt-12'>
       {/* BACK */}
       <button
         onClick={() => router.back()}
@@ -62,16 +62,11 @@ export default function CategoryDetailPage() {
 
       {/* HEADER */}
       <header className='mb-12'>
-        <h1 className='text-4xl font-bold text-white mb-2'>
-          {category.name}
-        </h1>
+        <h1 className='text-4xl font-bold text-white mb-2'>{category.name}</h1>
       </header>
 
       {/* PRODUCT LIST */}
-      <ProductList
-        endpoint={`/api/categories/${id}/products`}
-        mode='shop'
-      />
-    </main>
+      <ProductList endpoint={`/api/categories/${id}/products`} mode='shop' />
+    </div>
   )
 }

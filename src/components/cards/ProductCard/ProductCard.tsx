@@ -103,7 +103,6 @@ const ProductName = () => {
       className={`text-clip text-wrap xxs:truncate font-bold cursor-pointer hover:text-blue-500 transition-colors ${isList ? 'w-[calc(100vw-14rem)] lg:w-[calc(100vw-20rem)]' : 'max-w-full'}`}
     >
       {product.name}
-      aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     </h3>
   )
 }
