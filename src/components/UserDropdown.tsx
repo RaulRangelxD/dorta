@@ -4,9 +4,13 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import LogoutButton from './Logout'
+import { useAuth } from '@/context/AuthContext'
 
 const UserDropdown = () => {
   const [userOpen, setUserOpen] = useState(false)
+  const { user, loading } = useAuth()
+
+  if (loading) return null
 
   return (
     <div className='relative'>
@@ -15,7 +19,9 @@ const UserDropdown = () => {
         className='flex flex-row items-center ps-4 gap-4 border border-slate-800 hover:border-blue-500/50 rounded-full overflow-hidden cursor-pointer select-none'
         whileTap={{ scale: 0.9 }}
       >
-        <span className='text-slate-200 font-bold text-sm text-end'>Admin</span>
+        <span className='text-slate-200 font-bold text-sm text-end'>
+          {user?.role || 'User'}
+        </span>
         <Image
           className='rounded-full border border-gray-500/15 object-cover'
           src='/profile.jpg'

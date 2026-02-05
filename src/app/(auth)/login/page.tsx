@@ -6,9 +6,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Mail, Lock, Loader2, Eye, EyeOff, ChevronLeft } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { useAuth } from '@/context/AuthContext'
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -22,6 +22,14 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
+
+  const { user, loading, loginUser } = useAuth()
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/')
+    }
+  }, [loading, user, router])
 
   const {
     register,
@@ -39,7 +47,10 @@ export default function LoginPage() {
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: data.email, password: data.password }),
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }),
       })
 
       if (!response.ok) {
@@ -48,7 +59,9 @@ export default function LoginPage() {
       }
 
       const resData = await response.json()
+
       document.cookie = `token=${resData.token}; path=/; max-age=86400; secure; samesite=strict`
+      await loginUser()
 
       const anonymousCartId = localStorage.getItem('cartId')
       if (anonymousCartId) {
@@ -68,11 +81,13 @@ export default function LoginPage() {
 
       router.push('/')
     } catch (error) {
-      alert(error)
+      alert(error instanceof Error ? error.message : 'Unexpected error')
     } finally {
       setIsLoading(false)
     }
   }
+
+  if (loading) return null
 
   return (
     <div className='min-h-screen bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300'>
@@ -137,13 +152,7 @@ export default function LoginPage() {
                   Password
                 </label>
                 <div className='relative'>
-                  <Lock
-                    className={`absolute left-3 top-3.5 w-5 h-5 ${
-                      errors.password
-                        ? 'text-red-400'
-                        : 'text-slate-400 dark:text-slate-500'
-                    }`}
-                  />
+                  <Lock className='absolute left-3 top-3.5 w-5 h-5 text-slate-400' />
                   <input
                     {...register('password')}
                     type={showPassword ? 'text' : 'password'}
@@ -162,23 +171,6 @@ export default function LoginPage() {
                     )}
                   </button>
                 </div>
-              </div>
-
-              <div className='flex items-center justify-between text-sm font-semibold'>
-                <label className='flex items-center text-slate-600 dark:text-slate-400 cursor-pointer'>
-                  <input
-                    {...register('rememberMe')}
-                    type='checkbox'
-                    className='mr-2 h-4 w-4 text-blue-600 rounded border-slate-300 dark:border-slate-700 dark:bg-slate-800'
-                  />
-                  Remember me
-                </label>
-                <Link
-                  href='/forgot-password'
-                  className='text-blue-600 dark:text-blue-400 hover:underline'
-                >
-                  Forgot password?
-                </Link>
               </div>
 
               <button

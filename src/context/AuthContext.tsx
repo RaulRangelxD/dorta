@@ -7,11 +7,10 @@ import {
   useState,
   ReactNode,
 } from 'react'
-import { getToken } from '@/lib/session'
-import { verifyToken } from '@/lib/jwt'
 
 type AuthUser = {
   id: number
+  name?: string
   email: string
   role: string
 }
@@ -22,6 +21,7 @@ type AuthContextType = {
   hasRole: (role: string) => boolean
   isAdmin: boolean
   logout: () => void
+  loginUser: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -38,34 +38,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const initAuth = async () => {
-      try {
-        const token = await getToken()
-        if (!token) {
-          setUser(null)
-          return
-        }
-
-        const payload = verifyToken(token)
-        if (!payload || !payload.role) {
-          // Si no hay payload o role, no se autentica
-          setUser(null)
-          return
-        }
-
-        setUser({
-          id: payload.id,
-          email: payload.email,
-          role: payload.role, // Ahora TypeScript sabe que role es string
-        })
-      } finally {
-        setLoading(false)
-      }
+  const fetchUser = async () => {
+    try {
+      const res = await fetch('/api/auth/me')
+      if (!res.ok) throw new Error('Failed to fetch user')
+      const data = await res.json()
+      setUser(data.user)
+    } catch {
+      setUser(null)
+    } finally {
+      setLoading(false)
     }
+  }
 
-    initAuth()
+  useEffect(() => {
+    fetchUser()
   }, [])
+
+  const loginUser = async () => {
+    setLoading(true)
+    await fetchUser()
+  }
 
   const logout = () => {
     document.cookie = 'token=; path=/; max-age=0'
@@ -81,6 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         hasRole: (role: string) => (user ? user.role === role : false),
         isAdmin: user ? user.role === 'ADMIN' : false,
         logout,
+        loginUser,
       }}
     >
       {children}

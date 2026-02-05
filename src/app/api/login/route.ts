@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     if (!email || !password) {
       return NextResponse.json(
         { error: 'Email and password are required' },
-        { status: 400 }
+        { status: 400 },
       )
     }
 
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     if (!user) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
-        { status: 401 }
+        { status: 401 },
       )
     }
 
@@ -28,11 +28,16 @@ export async function POST(req: Request) {
     if (!isPasswordValid) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
-        { status: 401 }
+        { status: 401 },
       )
     }
 
-    const token = generateToken({ id: user.id, email: user.email })
+    const token = generateToken({
+      id: user.id,
+      name: user.name ?? undefined,
+      email: user.email,
+      role: user.role,
+    })
 
     const response = NextResponse.json({
       user: {
