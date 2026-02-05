@@ -5,6 +5,12 @@ import { ChevronLeft } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState, ChangeEvent, FormEvent } from 'react'
+import { useEffect } from 'react'
+
+type Category = {
+  id: number
+  name: string
+}
 
 type ProductFormData = {
   name: string
@@ -27,11 +33,27 @@ export default function ProductForm() {
 
   const [image, setImage] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
+  const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('/api/categories')
+        if (!res.ok) throw new Error('Failed to fetch categories')
+        const data = await res.json()
+        setCategories(data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchCategories()
+  }, [])
+
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target
     setForm((prev) => ({ ...prev, [name]: value }))
@@ -92,7 +114,7 @@ export default function ProductForm() {
       <div className='w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6'>
         <div className='grid grid-cols-3 justify-between'>
           <motion.button
-            onClick={() => router.back()}
+            onClick={() => router.push('/admin')}
             className='flex items-center gap-2 text-slate-500 hover:text-blue-500 transition-colors text-sm font-medium'
             whileTap={{ scale: 0.9 }}
           >
@@ -144,15 +166,23 @@ export default function ProductForm() {
               required
             />
 
-            <input
+            <select
               name='categoryId'
-              type='number'
-              placeholder='Category ID'
               value={form.categoryId}
               onChange={handleChange}
               className='input'
               required
-            />
+            >
+              <option value='' disabled>
+                Select category
+              </option>
+
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <textarea
