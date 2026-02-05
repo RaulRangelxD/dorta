@@ -36,7 +36,7 @@ const CartDropdown = () => {
   }
 
   return (
-    <div className='relative'>
+    <div>
       <motion.div
         onClick={() => setCartOpen(!cartOpen)}
         className='relative group cursor-pointer'
@@ -52,7 +52,7 @@ const CartDropdown = () => {
       </motion.div>
 
       {cartOpen && (
-        <div className='absolute max-h-[80vh] right-0 mt-2 w-[calc(100vw-2rem)] max-w-md lg:w-md bg-slate-900 border border-slate-800 hover:border-blue-500/50 rounded-2xl transition-all shadow-lg z-50 p-4 overflow-y-auto'>
+        <div className='fixed max-h-[80vh] right-2 mt-2 w-[calc(100vw-1rem)] max-w-md lg:w-md bg-slate-900 border border-slate-800 hover:border-blue-500/50 rounded-2xl transition-all shadow-lg z-50 p-4 overflow-y-auto'>
           {cart?.products.length ? (
             <>
               {cart.products.map((item) => (

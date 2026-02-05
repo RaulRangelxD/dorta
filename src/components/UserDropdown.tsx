@@ -13,13 +13,13 @@ const UserDropdown = () => {
   if (loading) return null
 
   return (
-    <div className='relative'>
+    <div>
       <motion.div
         onClick={() => setUserOpen(!userOpen)}
-        className='flex flex-row items-center ps-4 gap-4 border border-slate-800 hover:border-blue-500/50 rounded-full overflow-hidden cursor-pointer select-none'
+        className='flex flex-row items-center ps-0 lg:ps-4 gap-4 border border-slate-800 hover:border-blue-500/50 rounded-full overflow-hidden cursor-pointer select-none'
         whileTap={{ scale: 0.9 }}
       >
-        <span className='text-slate-200 font-bold text-sm text-end'>
+        <span className='hidden lg:flex text-slate-200 font-bold text-sm text-end'>
           {user?.role || 'User'}
         </span>
         <Image
@@ -31,8 +31,17 @@ const UserDropdown = () => {
         />
       </motion.div>
       {userOpen && (
-        <div className='absolute right-0 mt-2 bg-slate-900 border border-slate-800 hover:border-blue-500/50 rounded-2xl transition-all shadow-lg z-50 p-4 overflow-y-auto custom-scroll'>
-          <LogoutButton />
+        <div className='fixed flex flex-col w-[calc(100vw-1rem)] max-w-2xs lg:w-auto lg:max-w-xs lg:min-w-3xs right-2 bg-slate-900 border border-slate-800 hover:border-blue-500/50 rounded-2xl transition-all shadow-lg z-50 p-4 gap-1'>
+          <span className='text-slate-200 font-bold text-wrap break-all'>
+            {user?.name}
+          </span>
+          <span className='text-slate-400 font-bold text-sm text-wrap break-all'>
+            {user?.email}
+          </span>
+          <span className='text-blue-400 font-bold text-sm'>{user?.role}</span>
+          <div className='flex'>
+            <LogoutButton />
+          </div>
         </div>
       )}
     </div>

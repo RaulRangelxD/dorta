@@ -89,7 +89,7 @@ const Navbar = async ({ admin = false }: NavbarProps) => {
             </Link>
           </div>
         ) : (
-          <div className='hidden lg:flex'>
+          <div>
             <UserDropdown />
           </div>
         )}
