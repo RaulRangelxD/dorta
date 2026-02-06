@@ -4,6 +4,7 @@ import '@/app/globals.css'
 import Navbar from '@/components/Navbar'
 import { CartProvider } from '@/context/CartContext'
 import { AuthProvider } from '@/context/AuthContext'
+import Footer from '@/components/Footer'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -28,15 +29,15 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-50 font-sans dark:bg-black`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 font-sans`}
       >
         <AuthProvider>
           <CartProvider>
             <header>
               <Navbar />
             </header>
-            <main className='min-h-screen pt-16 bg-slate-950'>{children}</main>
-            <footer></footer>
+            <main className='min-h-screen py-16 bg-slate-950'>{children}</main>
+            <Footer />
           </CartProvider>
         </AuthProvider>
       </body>
