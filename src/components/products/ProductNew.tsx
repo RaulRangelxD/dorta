@@ -127,76 +127,94 @@ export default function ProductForm() {
           className='w-full max-w-3xl bg-slate-900 rounded-2xl p-6 space-y-6'
         >
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <input
-              name='name'
-              placeholder='Product name'
-              value={form.name}
-              onChange={handleChange}
-              className='input'
-              required
-            />
+            <div className='space-y-2'>
+              <p className='ps-1 text-sm text-slate-400'>Name</p>
+              <input
+                name='name'
+                placeholder='Product name'
+                value={form.name}
+                onChange={handleChange}
+                className='input'
+                required
+              />
+            </div>
 
-            <input
-              name='reference'
-              placeholder='Reference'
-              value={form.reference}
-              onChange={handleChange}
-              className='input'
-              required
-            />
+            <div className='space-y-2'>
+              <p className='ps-1 text-sm text-slate-400'>Reference</p>
+              <input
+                name='reference'
+                placeholder='Reference'
+                value={form.reference}
+                onChange={handleChange}
+                className='input'
+                required
+              />
+            </div>
 
-            <input
-              name='price'
-              type='number'
-              step='0.01'
-              placeholder='Price'
-              value={form.price}
-              onChange={handleChange}
-              className='input'
-              required
-            />
+            <div className='space-y-2'>
+              <p className='ps-1 text-sm text-slate-400'>Price</p>
+              <input
+                name='price'
+                type='number'
+                step='0.01'
+                placeholder='Price'
+                value={form.price}
+                onChange={handleChange}
+                className='input'
+                required
+              />
+            </div>
 
-            <input
-              name='stock'
-              type='number'
-              placeholder='Stock'
-              value={form.stock}
-              onChange={handleChange}
-              className='input'
-              required
-            />
+            <div className='space-y-2'>
+              <p className='ps-1 text-sm text-slate-400'>Stock</p>
+              <input
+                name='stock'
+                type='number'
+                placeholder='Stock'
+                value={form.stock}
+                onChange={handleChange}
+                className='input'
+                required
+              />
+            </div>
 
-            <select
-              name='categoryId'
-              value={form.categoryId}
-              onChange={handleChange}
-              className='input'
-              required
-            >
-              <option value='' disabled>
-                Select category
-              </option>
-
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
+            <div className='space-y-2'>
+              <p className='ps-1 text-sm text-slate-400'>Category</p>
+              <select
+                name='categoryId'
+                value={form.categoryId}
+                onChange={handleChange}
+                className='input'
+                required
+              >
+                <option value='' disabled>
+                  Select category
                 </option>
-              ))}
-            </select>
+
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <textarea
-            name='description'
-            placeholder='Description'
-            value={form.description}
-            onChange={handleChange}
-            rows={4}
-            className='input'
-            required
-          />
+          <div className='space-y-2'>
+            <p className='ps-1 text-sm text-slate-400'>Description</p>
+            <textarea
+              name='description'
+              placeholder='Description'
+              value={form.description}
+              onChange={handleChange}
+              rows={4}
+              className='input'
+              required
+            />
+          </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            <label className='flex flex-col gap-2 text-sm text-slate-400'>
+            <label className='flex flex-col gap-2 ps-1 text-sm text-slate-400'>
               Product image
               <input
                 type='file'

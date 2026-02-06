@@ -152,67 +152,88 @@ export default function ProductEditForm() {
           </header>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <input
-              name='name'
-              value={form.name}
-              onChange={handleChange}
-              className='input'
-              required
-            />
-            <input
-              name='reference'
-              value={form.reference}
-              onChange={handleChange}
-              className='input'
-              required
-            />
-            <input
-              name='price'
-              type='number'
-              value={form.price}
-              onChange={handleChange}
-              className='input'
-              required
-            />
-            <input
-              name='stock'
-              type='number'
-              value={form.stock}
-              onChange={handleChange}
-              className='input'
-              required
-            />
-            <select
-              name='categoryId'
-              value={form.categoryId}
-              onChange={handleChange}
-              className='input'
-              required
-            >
-              <option value='' disabled>
-                Select category
-              </option>
+            <div className='space-y-2'>
+              <p className='ps-1 text-sm text-slate-400'>Name</p>
+              <input
+                name='name'
+                value={form.name}
+                onChange={handleChange}
+                className='input'
+                required
+              />
+            </div>
 
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
+            <div className='space-y-2'>
+              <p className='ps-1 text-sm text-slate-400'>Reference</p>
+              <input
+                name='reference'
+                value={form.reference}
+                onChange={handleChange}
+                className='input'
+                required
+              />
+            </div>
+
+            <div className='space-y-2'>
+              <p className='ps-1 text-sm text-slate-400'>Price</p>
+              <input
+                name='price'
+                type='number'
+                value={form.price}
+                onChange={handleChange}
+                className='input'
+                required
+              />
+            </div>
+
+            <div className='space-y-2'>
+              <p className='ps-1 text-sm text-slate-400'>Stock</p>
+              <input
+                name='stock'
+                type='number'
+                value={form.stock}
+                onChange={handleChange}
+                className='input'
+                required
+              />
+            </div>
+
+            <div className='space-y-2'>
+              <p className='ps-1 text-sm text-slate-400'>Category</p>
+              <select
+                name='categoryId'
+                value={form.categoryId}
+                onChange={handleChange}
+                className='input'
+                required
+              >
+                <option value='' disabled>
+                  Select category
                 </option>
-              ))}
-            </select>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <textarea
-            name='description'
-            value={form.description}
-            onChange={handleChange}
-            rows={4}
-            className='input'
-            required
-          />
+          <div className='space-y-2'>
+            <p className='ps-1 text-sm text-slate-400'>Description</p>
+            <textarea
+              name='description'
+              value={form.description}
+              onChange={handleChange}
+              rows={4}
+              className='input'
+              required
+            />
+          </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
             <div className='space-y-2'>
-              <p className='text-sm text-slate-400'>Current image</p>
+              <p className='ps-1 text-sm text-slate-400'>Current image</p>
 
               {(preview || currentImage) && (
                 <Image
@@ -225,7 +246,7 @@ export default function ProductEditForm() {
               )}
             </div>
 
-            <label className='flex flex-col gap-2 text-sm text-slate-400'>
+            <label className='flex flex-col gap-2 ps-1 text-sm text-slate-400'>
               Replace image
               <input
                 type='file'

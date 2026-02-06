@@ -231,9 +231,7 @@ const ProductAdminAction = () => {
       </motion.button>
       <motion.button
         onClick={() => {
-          if (confirm('¿Eliminar producto?')) {
-            router.push(`/admin/products/delete/${product.id}`)
-          }
+          router.push(`/admin/products/delete/${product.id}`)
         }}
         className='group/button flex gap-2 px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-red-500/50 rounded transition-colors'
         whileTap={{ scale: 0.9 }}
