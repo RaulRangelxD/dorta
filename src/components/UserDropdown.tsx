@@ -19,7 +19,7 @@ const UserDropdown = () => {
         className='flex flex-row items-center ps-0 lg:ps-4 gap-4 border border-slate-800 hover:border-blue-500/50 rounded-full overflow-hidden cursor-pointer select-none'
         whileTap={{ scale: 0.9 }}
       >
-        <span className='hidden lg:flex text-slate-200 font-bold text-sm text-end'>
+        <span className='hidden lg:flex text-slate-200 font-bold text-sm text-end capitalize'>
           {user?.role || 'User'}
         </span>
         <Image
@@ -38,7 +38,9 @@ const UserDropdown = () => {
           <span className='text-slate-400 font-bold text-sm text-wrap break-all'>
             {user?.email}
           </span>
-          <span className='text-blue-400 font-bold text-sm'>{user?.role}</span>
+          <span className='text-blue-400 font-bold text-sm capitalize'>
+            {user?.role}
+          </span>
           <div className='flex'>
             <LogoutButton />
           </div>
