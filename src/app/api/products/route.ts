@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { NextResponse } from 'next/server'
 import { del, put } from '@vercel/blob'
+import { requireAdmin } from '@/lib/auth-role'
 
 type ProductUpdateData = {
   name?: string
@@ -37,6 +38,7 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  await requireAdmin()
   const formData = await req.formData()
 
   const name = formData.get('name') as string
@@ -73,6 +75,7 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
+  await requireAdmin()
   const url = new URL(req.url)
   const id = Number(url.searchParams.get('id'))
 
@@ -133,6 +136,7 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  await requireAdmin()
   const url = new URL(req.url)
   const id = Number(url.searchParams.get('id'))
 

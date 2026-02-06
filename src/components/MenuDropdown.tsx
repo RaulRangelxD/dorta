@@ -12,7 +12,6 @@ type MenuProps = {
 
 const MenuDropdown = ({ admin = false, token = null }: MenuProps) => {
   const [menuOpen, setMenuOpen] = useState(false)
-  console.log(token)
 
   return (
     <div>

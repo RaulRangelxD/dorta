@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
-export default function LogoutPage() {
+export default function DontPermissionsPage() {
   const router = useRouter()
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function LogoutPage() {
         height={400}
       />
       <p className='mt-4 text-slate-200 text-lg text-center'>
-        You have been logged out. Redirecting...
+        You don&apos;t have permissions to access this page. Redirecting...
       </p>
     </div>
   )

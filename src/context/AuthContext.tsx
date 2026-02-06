@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         loading,
         hasRole: (role: string) => (user ? user.role === role : false),
-        isAdmin: user ? user.role === 'ADMIN' : false,
+        isAdmin: user ? user.role === 'admin' : false,
         logout,
         loginUser,
       }}

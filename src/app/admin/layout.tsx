@@ -4,6 +4,7 @@ import '@/app/globals.css'
 import Navbar from '@/components/Navbar'
 import { CartProvider } from '@/context/CartContext'
 import { AuthProvider } from '@/context/AuthContext'
+import AdminGuard from '@/components/AdminGuard'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,7 +36,9 @@ export default function RootLayout({
             <header>
               <Navbar admin />
             </header>
-            <main className='min-h-screen pt-16 bg-slate-950'>{children}</main>
+            <main className='min-h-screen pt-16 bg-slate-950'>
+              <AdminGuard>{children}</AdminGuard>
+            </main>
             <footer></footer>
           </CartProvider>
         </AuthProvider>
