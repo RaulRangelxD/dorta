@@ -40,7 +40,7 @@ export const ProductCard = ({
       <motion.div
         variants={itemVars}
         className={`group bg-slate-900 border border-slate-800 rounded-2xl
-          hover:border-blue-500/50 transition-all overflow-hidden
+          hover:border-blue-500/50 transition-all overflow-hidden shadow-xl shadow-blue-500/5 hover:shadow-xl hover:shadow-blue-500/20
           ${isList ? 'flex flex-row items-stretch w-full' : 'flex flex-col w-64'}
         `}
       >
