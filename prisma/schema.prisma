@@ -14,6 +14,7 @@ model User {
   password  String
   cart      Cart?
   role      String
+  orders    Order[]
 }
 
 model Category {
@@ -38,6 +39,7 @@ model Product {
   updatedAt   DateTime      @updatedAt
   categoryId  Int
   cartItems   CartProduct[]
+  orderItems  OrderItem[]
   category    Category      @relation(fields: [categoryId], references: [id])
 }
 
@@ -58,4 +60,25 @@ model CartProduct {
   product   Product @relation(fields: [productId], references: [id])
 
   @@unique([cartId, productId])
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  userId    Int?
+  createdAt DateTime    @default(now())
+  status    String      @default("PENDING")
+  total     Float
+  items     OrderItem[]
+  user      User?       @relation(fields: [userId], references: [id])
+}
+
+model OrderItem {
+  id        Int   @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
 }
