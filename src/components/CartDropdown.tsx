@@ -5,12 +5,14 @@ import { useState } from 'react'
 import { Banknote, Minus, Package, Plus, ShoppingCart, X } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 
 const CartDropdown = () => {
-  const { cart, addProduct, removeProduct, clearCart } = useCart()
+  const { cart, addProduct, removeProduct, clearCart, createOrder } = useCart()
   const [cartOpen, setCartOpen] = useState(false)
   const [incId, setIncId] = useState<number | null>(null)
   const [decId, setDecId] = useState<number | null>(null)
+  const router = useRouter()
 
   const totalItems = cart?.products.reduce((acc, p) => acc + p.quantity, 0) || 0
 
@@ -166,7 +168,12 @@ const CartDropdown = () => {
                   </span>
                 </motion.button>
                 <motion.button
-                  onClick={clearCart}
+                  onClick={async () => {
+                    const order = await createOrder()
+                    if (order) {
+                      router.push(`/orders/${order.id}`)
+                    }
+                  }}
                   whileTap={{ scale: 0.9 }}
                   className='group/button px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-green-500/50 rounded transition-colors'
                 >

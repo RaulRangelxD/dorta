@@ -49,6 +49,8 @@ model Cart {
   createdAt DateTime      @default(now())
   user      User?         @relation(fields: [userId], references: [id])
   products  CartProduct[]
+  orderId   Int?          @unique
+  order     Order?        @relation(fields: [orderId], references: [id])
 }
 
 model CartProduct {
@@ -70,6 +72,7 @@ model Order {
   total     Float
   items     OrderItem[]
   user      User?       @relation(fields: [userId], references: [id])
+  cart      Cart?
 }
 
 model OrderItem {

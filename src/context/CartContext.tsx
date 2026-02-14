@@ -9,6 +9,7 @@ import {
 } from 'react'
 import { getToken } from '@/lib/session'
 import { verifyToken } from '@/lib/jwt'
+import { Order } from '@prisma/client'
 
 type CartProduct = {
   id: number
@@ -33,6 +34,7 @@ type CartContextType = {
   addProduct: (productId: number, quantity?: number) => Promise<void>
   removeProduct: (productId: number) => Promise<void>
   clearCart: () => Promise<void>
+  createOrder: () => Promise<Order | null>
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
@@ -144,13 +146,54 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  const createOrder = async () => {
+    if (!cart) return null
+
+    try {
+      const token = await getToken()
+      let userId: number | null = null
+
+      if (token) {
+        const payload = verifyToken(token)
+        if (payload?.id) userId = payload.id
+      }
+
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          cartId: cart.id,
+          userId,
+        }),
+      })
+
+      const data: Order = await res.json()
+      if (!res.ok) throw new Error()
+
+      await fetchCart() // refresca carrito vacío
+      return data
+    } catch (err) {
+      console.error(err)
+      return null
+    }
+  }
+
   useEffect(() => {
     fetchCart()
   }, [])
 
   return (
     <CartContext.Provider
-      value={{ cart, loading, fetchCart, addProduct, removeProduct, clearCart }}
+      value={{
+        cart,
+        loading,
+        fetchCart,
+        addProduct,
+        removeProduct,
+        clearCart,
+        createOrder,
+      }}
     >
       {children}
     </CartContext.Provider>
