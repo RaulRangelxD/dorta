@@ -46,21 +46,13 @@ export async function POST(req: Request) {
             price: item.product.price,
           },
         })
-
-        // Opcional: descontar stock
-        await tx.product.update({
-          where: { id: item.productId },
-          data: {
-            stock: {
-              decrement: item.quantity,
-            },
-          },
-        })
       }
 
-      // Vaciar carrito
-      await tx.cartProduct.deleteMany({
-        where: { cartId },
+      await tx.cart.update({
+        where: { id: cartId },
+        data: {
+          orderId: newOrder.id,
+        },
       })
 
       return newOrder

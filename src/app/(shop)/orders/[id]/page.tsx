@@ -1,7 +1,8 @@
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import { Banknote } from 'lucide-react'
+import { OrderActions } from '@/components/order/OrderActions'
+import Image from 'next/image'
+import { Package } from 'lucide-react'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -10,71 +11,61 @@ type Props = {
 export default async function OrderPage({ params }: Props) {
   const { id } = await params
   const orderId = Number(id)
-
   if (isNaN(orderId)) return notFound()
 
   const order = await prisma.order.findUnique({
     where: { id: orderId },
-    include: {
-      items: {
-        include: {
-          product: true,
-        },
-      },
-    },
+    include: { items: { include: { product: true } } },
   })
-
   if (!order) return notFound()
 
-  const message = `
-Hello, I would like to confirm Order #${order.id}
-
-${order.items
-  .map(
-    (item) =>
-      `- ${item.product.name} (${item.quantity}) - $${(
-        item.price * item.quantity
-      ).toFixed(2)}`,
-  )
-  .join('\n')}
-
-Total: $${order.total.toFixed(2)}
-`
-
-  const whatsappNumber = '+584160751024'
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    message,
-  )}`
-
   return (
-    <div className='max-w-2xl mx-auto p-6 text-white'>
-      <h1 className='text-2xl font-bold mb-4'>Order #{order.id}</h1>
+    <div className='max-w-3xl mx-auto p-6 text-white'>
+      <h1 className='text-2xl font-bold mb-4'>Order</h1>
 
       {order.items.map((item) => (
         <div
           key={item.id}
-          className='flex justify-between border-b border-slate-700 pb-2'
+          className='group flex justify-between py-2 border-b border-slate-800 hover:border-blue-500/50 transition-all'
         >
-          <span>
-            {item.product.name} × {item.quantity}
-          </span>
-          <span>${(item.price * item.quantity).toFixed(2)}</span>
+          <div className='relative flex items-center justify-center rounded-2xl overflow-hidden w-32 min-h-32'>
+            {item.product.img?.startsWith('http') ? (
+              <Image
+                src={item.product.img}
+                alt={item.product.name}
+                fill
+                className='object-cover group-hover:scale-105 transition-transform'
+              />
+            ) : (
+              <Package
+                size={32}
+                className='text-slate-700 group-hover:text-blue-500 transition-colors'
+              />
+            )}
+          </div>
+          <div className='flex flex-col w-full px-2'>
+            <span>
+              {item.product.name}{' '}
+              <span className='text-gray-500 dark:text-gray-400 mt-1'>
+                × {item.quantity}
+              </span>
+            </span>
+            <span className='text-sm text-gray-500 dark:text-gray-400 mt-1'>
+              ${(item.price * item.quantity).toFixed(2)}
+            </span>
+          </div>
         </div>
       ))}
 
-      <div className='flex justify-between mt-6 font-semibold text-lg'>
-        <span>Total:</span>
-        <span>${order.total.toFixed(2)}</span>
-      </div>
+      <div className='flex flex-wrap justify-between items-center font-semibold text-lg py-2'>
+        <span>Total: ${order.total.toFixed(2)}</span>
 
-      <Link
-        href={whatsappUrl}
-        target='_blank'
-        className='mt-6 inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded transition'
-      >
-        <Banknote size={18} />
-        Confirm via WhatsApp
-      </Link>
+        <OrderActions
+          orderId={order.id}
+          items={order.items}
+          total={order.total}
+        />
+      </div>
     </div>
   )
 }

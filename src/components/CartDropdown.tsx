@@ -167,21 +167,36 @@ const CartDropdown = () => {
                     x
                   </span>
                 </motion.button>
-                <motion.button
-                  onClick={async () => {
-                    const order = await createOrder()
-                    if (order) {
-                      router.push(`/orders/${order.id}`)
-                    }
-                  }}
-                  whileTap={{ scale: 0.9 }}
-                  className='group/button px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-green-500/50 rounded transition-colors'
-                >
-                  <Banknote
-                    className='text-slate-500 group-hover/button:text-green-500'
-                    size={16}
-                  />
-                </motion.button>
+                {cart?.orderId ? (
+                  <motion.button
+                    onClick={() => {
+                      router.push(`/orders/${cart.orderId}`)
+                      setCartOpen(!cartOpen)
+                    }}
+                    whileTap={{ scale: 0.9 }}
+                    className='group/button px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-green-500/50 rounded transition-colors'
+                  >
+                    <Banknote
+                      className='text-slate-500 group-hover/button:text-green-500'
+                      size={16}
+                    />
+                  </motion.button>
+                ) : (
+                  <motion.button
+                    onClick={async () => {
+                      const order = await createOrder()
+                      if (order) router.push(`/orders/${order.id}`)
+                      setCartOpen(!cartOpen)
+                    }}
+                    whileTap={{ scale: 0.9 }}
+                    className='group/button px-3 py-2 justify-center items-center bg-slate-800 border border-slate-800 hover:border-green-500/50 rounded transition-colors'
+                  >
+                    <Banknote
+                      className='text-slate-500 group-hover/button:text-green-500'
+                      size={16}
+                    />
+                  </motion.button>
+                )}
               </div>
             </>
           ) : (

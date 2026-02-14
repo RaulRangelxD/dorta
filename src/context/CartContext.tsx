@@ -25,6 +25,7 @@ type CartProduct = {
 type Cart = {
   id: number
   products: CartProduct[]
+  orderId: number | null
 }
 
 type CartContextType = {
@@ -93,6 +94,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const addProduct = async (productId: number, quantity = 1) => {
     if (!cart) await fetchCart()
+    if (!cart) return
+
+    if (cart?.orderId) {
+      alert(
+        'You have a pending order. Complete payment before changing your cart.',
+      )
+      return
+    }
+
     try {
       const cartId = cart?.id || Number(localStorage.getItem('cartId'))
       if (!cartId) return
@@ -106,7 +116,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to add product')
 
-      await fetchCart() // refresca el carrito después de añadir/restar
+      await fetchCart()
     } catch (err) {
       console.error(err)
     }
@@ -114,6 +124,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const removeProduct = async (productId: number) => {
     if (!cart) return
+    if (cart?.orderId) {
+      alert(
+        'You have a pending order. Complete payment before changing your cart.',
+      )
+      return
+    }
     try {
       const res = await fetch('/api/cart', {
         method: 'DELETE',
@@ -131,6 +147,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = async () => {
     if (!cart) return
+    if (cart?.orderId) {
+      alert(
+        'You have a pending order. Complete payment before changing your cart.',
+      )
+      return
+    }
     try {
       const res = await fetch('/api/cart', {
         method: 'DELETE',
@@ -148,6 +170,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const createOrder = async () => {
     if (!cart) return null
+    if (cart.orderId) {
+      alert('You already have a pending order.')
+      return null
+    }
 
     try {
       const token = await getToken()
@@ -169,9 +195,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       })
 
       const data: Order = await res.json()
-      if (!res.ok) throw new Error()
+      if (!res.ok) throw new Error('Failed to create order')
 
-      await fetchCart() // refresca carrito vacío
+      setCart((prev) => (prev ? { ...prev, orderId: data.id } : prev))
+
       return data
     } catch (err) {
       console.error(err)
