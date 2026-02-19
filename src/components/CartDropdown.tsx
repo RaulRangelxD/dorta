@@ -200,7 +200,7 @@ const CartDropdown = () => {
               </div>
             </>
           ) : (
-            <p>Tu carrito está vacío</p>
+            <p>Your cart is empty</p>
           )}
         </div>
       )}
