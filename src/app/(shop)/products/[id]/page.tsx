@@ -7,6 +7,7 @@ import { useRouter, useParams } from 'next/navigation'
 import type { Product } from '@/utils/types'
 import Image from 'next/image'
 import { useCart } from '@/context/CartContext'
+import { useTranslations } from 'next-intl'
 
 export default function ProductViewPage() {
   const { id } = useParams()
@@ -15,6 +16,7 @@ export default function ProductViewPage() {
   const [added, setAdded] = useState(false)
   const [product, setProduct] = useState<Product | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const t = useTranslations('ProductPage')
 
   useEffect(() => {
     async function fetchProduct() {
@@ -56,7 +58,7 @@ export default function ProductViewPage() {
         className='flex items-center gap-2 text-slate-500 hover:text-blue-500'
         whileTap={{ scale: 0.95 }}
       >
-        <ChevronLeft size={18} /> Back
+        <ChevronLeft size={18} /> {t('back')}
       </motion.button>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -122,7 +124,7 @@ export default function ProductViewPage() {
                     : 'text-slate-500 group-hover/button:text-blue-500 transition-colors flex flex-row items-center gap-1'
                 }
               >
-                Buy Now
+                {t('buyNow')}
                 <ShoppingCart className='w-4 h-4' />
               </motion.span>
             </motion.button>

@@ -5,6 +5,7 @@ import CartDropdown from './CartDropdown'
 import { getToken } from '@/lib/session'
 import UserDropdown from './UserDropdown'
 import MenuDropdown from './MenuDropdown'
+import { getTranslations } from 'next-intl/server'
 
 type NavbarProps = {
   admin?: boolean
@@ -12,6 +13,7 @@ type NavbarProps = {
 
 const Navbar = async ({ admin = false }: NavbarProps) => {
   const token = await getToken()
+  const t = await getTranslations('Navbar')
 
   return (
     <nav className='w-full fixed z-50 flex items-center justify-between ps-2 pe-4 lg:px-8 py-4 shadow-sm bg-slate-900 text-slate-100 font-sans'>
@@ -39,7 +41,7 @@ const Navbar = async ({ admin = false }: NavbarProps) => {
                 className='text-white hover:text-blue-500 flex items-center gap-0.5 transition-colors'
               >
                 <LayoutGrid className='inline w-4 h-4 mr-1' />
-                Categories
+                {t('categories')}
               </Link>
             </>
           ) : (
@@ -49,14 +51,14 @@ const Navbar = async ({ admin = false }: NavbarProps) => {
                 className='text-white hover:text-blue-500 flex items-center gap-0.5 transition-colors'
               >
                 <LayoutGrid className='inline w-4 h-4 mr-1' />
-                Categories
+                {t('categories')}
               </Link>
               <Link
                 href='/admin'
                 className='text-white hover:text-blue-500 flex items-center gap-0.5 transition-colors'
               >
                 <Laptop className='inline w-4 h-4 mr-1' />
-                Dashboard
+                {t('dashboard')}
               </Link>
             </>
           )}
@@ -68,7 +70,7 @@ const Navbar = async ({ admin = false }: NavbarProps) => {
           <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4' />
           <input
             type='text'
-            placeholder='Search products...'
+            placeholder={t('search')}
             className='pl-10 pr-4 py-2 bg-slate-800 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-48 lg:w-64 transition-all'
           />
         </div>
@@ -79,13 +81,13 @@ const Navbar = async ({ admin = false }: NavbarProps) => {
               href='/login'
               className='px-4 py-2 bg-slate-800 text-white hover:bg-blue-500/75'
             >
-              Login
+              {t('login')}
             </Link>
             <Link
               href='/register'
               className='px-4 py-2 bg-slate-800 text-white hover:bg-green-500/75'
             >
-              Register
+              {t('register')}
             </Link>
           </div>
         ) : (

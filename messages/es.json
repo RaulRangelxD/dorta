@@ -1,0 +1,65 @@
+{
+  "Navbar": {
+    "categories": "Categorías",
+    "dashboard": "Panel de Control",
+    "search": "Buscar",
+    "login": "Iniciar Sesión",
+    "logout": "Cerrar Sesión",
+    "register": "Registrarse"
+  },
+  "Cart": {
+    "empty": "Tu carrito está vacío.",
+    "p/u": "c/u",
+    "total": "Total"
+  },
+
+  "Hero": {
+    "slide1Title": "Tu hogar en",
+    "slide1Subtitle": "equilibrio perfecto",
+    "slide2Title": "Todo lo que necesitas",
+    "slide2Subtitle": "está aquí",
+    "slide3Title": "Vive con",
+    "slide3Subtitle": "total tranquilidad",
+    "description": "En Ferroelectrics Dorta, puedes estar tranquilo: todo lo que tu hogar necesita está aquí.",
+    "exploreButton": "Explorar Categorías"
+  },
+  "Home": {
+    "featuredProducts": "Productos Destacados"
+  },
+  "ProductPage": { "back": "Volver", "buyNow": "Comprar Ahora" },
+  "CategoriesPage": {
+    "back": "Volver",
+    "departments": "Departamentos",
+    "findPart": "Encuentra la pieza exacta para tu equipo.",
+    "itemsListed": "{count} artículos disponibles.",
+    "viewParts": "Ver piezas",
+    "noCategories": "No hay categorías en este departamento todavía.",
+    "departmentsList": {
+      "Major Appliances": "Electrodomésticos",
+      "Tools & Repair": "Herramientas y Reparación",
+      "Climate Control": "Climatización",
+      "Electronics": "Electrónica",
+      "Care & Cleaning": "Cuidado y Limpieza"
+    }
+  },
+  "CategoryPage": {
+    "back": "Volver",
+    "notFound": "Categoría no encontrada."
+  },
+  "OrderPage": {
+    "orderDetails": "Detalles del Pedido",
+    "status": "Estado",
+    "total": "Total",
+    "statusList": {
+      "PENDING": "Pendiente",
+      "SHIPPED": "Enviado",
+      "CANCELLED": "Cancelado"
+    }
+  },
+  "DontPermissions": {
+    "message": "No tienes permisos para acceder a esta página, redirigiendo..."
+  },
+  "Logout": {
+    "message": "Has sido desconectado, redirigiendo a la página principal..."
+  }
+}

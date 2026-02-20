@@ -16,6 +16,7 @@ import {
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
 interface Product {
   id: number
@@ -33,7 +34,7 @@ interface Category {
 }
 
 interface Department {
-  name: string
+  key: string
   icon: LucideIcon
 }
 
@@ -51,17 +52,18 @@ const itemVars = {
 }
 
 export default function CategoriesPage() {
+  const t = useTranslations('CategoriesPage')
+  const router = useRouter()
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [activeDept, setActiveDept] = useState<string>('Major Appliances')
-  const router = useRouter()
 
   const departments: Department[] = [
-    { name: 'Major Appliances', icon: Refrigerator },
-    { name: 'Tools & Repair', icon: Wrench },
-    { name: 'Climate Control', icon: Wind },
-    { name: 'Electronics', icon: Cpu },
-    { name: 'Care & Cleaning', icon: Sparkles },
+    { key: 'Major Appliances', icon: Refrigerator },
+    { key: 'Tools & Repair', icon: Wrench },
+    { key: 'Climate Control', icon: Wind },
+    { key: 'Electronics', icon: Cpu },
+    { key: 'Care & Cleaning', icon: Sparkles },
   ]
 
   useEffect(() => {
@@ -97,7 +99,7 @@ export default function CategoriesPage() {
   )
 
   const filteredCategories = categories.filter(
-    (cat) => (cat.department || 'Major Appliances') === activeDept,
+    (cat) => cat.department === activeDept,
   )
 
   return (
@@ -108,40 +110,38 @@ export default function CategoriesPage() {
             onClick={() => router.back()}
             className='flex items-center gap-2 text-slate-500 hover:text-blue-400 transition-colors text-sm font-medium'
           >
-            <ChevronLeft size={18} /> Back
+            <ChevronLeft size={18} /> {t('back')}
           </button>
         </div>
 
         <header className='mb-12'>
           <h1 className='text-4xl font-bold tracking-tight text-white mb-3'>
-            {activeDept}
+            {t(`departmentsList.${activeDept}`)}
           </h1>
-          <p className='text-slate-400 text-lg'>
-            Find the exact part for your equipment.
-          </p>
+          <p className='text-slate-400 text-lg'>{t('findPart')}</p>
         </header>
 
         <div className='flex flex-col lg:flex-row gap-8'>
-          <aside className='w-full lg:w-64 shrink-0'>
-            <div className='bg-[#0b1120] border border-slate-800 rounded-2xl p-6 sticky top-10'>
+          <aside className='w-full lg:w-68 shrink-0'>
+            <div className='bg-[#0b1120] border border-slate-800 rounded-2xl p-4 sticky top-10'>
               <h3 className='text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-6'>
-                Departments
+                {t('departments')}
               </h3>
               <nav className='space-y-2'>
                 {departments.map((dept) => {
                   const Icon = dept.icon
-                  const isActive = activeDept === dept.name
+                  const isActive = activeDept === dept.key
                   return (
                     <button
-                      key={dept.name}
-                      onClick={() => setActiveDept(dept.name)}
+                      key={dept.key}
+                      onClick={() => setActiveDept(dept.key)}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm ${
                         isActive
-                          ? 'bg-blue-600/10 text-blue-500 font-bold'
+                          ? 'bg-blue-600/10 text-blue-500 font-medium'
                           : 'text-slate-400 hover:bg-slate-800/50 font-medium'
                       }`}
                     >
-                      <Icon size={18} /> {dept.name}
+                      <Icon size={18} /> {t(`departmentsList.${dept.key}`)}
                     </button>
                   )
                 })}
@@ -183,13 +183,13 @@ export default function CategoriesPage() {
                         {cat.name}
                       </h3>
                       <p className='text-slate-500 text-sm mb-6'>
-                        {cat.products?.length || 0} items listed.
+                        {t('itemsListed', { count: cat.products?.length || 0 })}
                       </p>
                       <Link
                         href={`/categories/${cat.id}`}
                         className='flex items-center justify-between w-full py-3 px-5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-900/20'
                       >
-                        View Parts <ArrowRight size={16} />
+                        {t('viewParts')} <ArrowRight size={16} />
                       </Link>
                     </div>
                   </motion.div>
@@ -197,9 +197,7 @@ export default function CategoriesPage() {
               </motion.div>
             ) : (
               <div className='text-center py-20 bg-[#0b1120]/50 rounded-3xl border border-dashed border-slate-800'>
-                <p className='text-slate-500'>
-                  No categories in this department yet.
-                </p>
+                <p className='text-slate-500'>{t('noCategories')}</p>
               </div>
             )}
           </div>

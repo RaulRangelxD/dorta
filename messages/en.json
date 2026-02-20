@@ -1,0 +1,64 @@
+{
+  "Navbar": {
+    "categories": "Categories",
+    "dashboard": "Dashboard",
+    "search": "Search",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register"
+  },
+  "Cart": {
+    "empty": "Your cart is empty.",
+    "p/u": "p/u",
+    "total": "Total"
+  },
+  "Hero": {
+    "slide1Title": "Your home in",
+    "slide1Subtitle": "perfect balance",
+    "slide2Title": "Everything you need",
+    "slide2Subtitle": "is right here",
+    "slide3Title": "Live with",
+    "slide3Subtitle": "total peace of mind",
+    "description": "At Ferroelectrics Dorta, you can rest easy: everything your home needs is found right here.",
+    "exploreButton": "Explore Categories"
+  },
+  "Home": {
+    "featuredProducts": "Featured Products"
+  },
+  "ProductPage": { "back": "Back", "buyNow": "Buy Now" },
+  "CategoriesPage": {
+    "back": "Back",
+    "departments": "Departments",
+    "findPart": "Find the exact part for your equipment.",
+    "itemsListed": "{count} items listed.",
+    "viewParts": "View Parts",
+    "noCategories": "No categories in this department yet.",
+    "departmentsList": {
+      "Major Appliances": "Major Appliances",
+      "Tools & Repair": "Tools & Repair",
+      "Climate Control": "Climate Control",
+      "Electronics": "Electronics",
+      "Care & Cleaning": "Care & Cleaning"
+    }
+  },
+  "CategoryPage": {
+    "back": "Back",
+    "notFound": "Category not found."
+  },
+  "OrderPage": {
+    "orderDetails": "Order Details",
+    "status": "Status",
+    "total": "Total",
+    "statusList": {
+      "PENDING": "Pending",
+      "SHIPPED": "Shipped",
+      "CANCELLED": "Cancelled"
+    }
+  },
+  "DontPermissions": {
+    "message": "You don't have permissions to access this page, redirecting..."
+  },
+  "Logout": {
+    "message": "You have been logged out, redirecting to home..."
+  }
+}

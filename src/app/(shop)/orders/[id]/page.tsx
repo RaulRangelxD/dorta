@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { OrderActions } from '@/components/order/OrderActions'
 import Image from 'next/image'
 import { Package } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -19,10 +20,27 @@ export default async function OrderPage({ params }: Props) {
   })
   if (!order) return notFound()
 
+  const t = await getTranslations('OrderPage')
+
   return (
     <div className='max-w-3xl mx-auto p-6 text-white'>
-      <h1 className='text-2xl font-bold mb-4'>Order</h1>
-
+      <div className='flex flex-row w-full justify-between'>
+        <h1 className='text-2xl font-bold mb-4'>{t('orderDetails')}</h1>
+        <span className='text-sm text-gray-500 dark:text-gray-400'>
+          {t('status')}
+          <span
+            className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${
+              order.status === 'pending'
+                ? 'bg-yellow-500 text-black'
+                : order.status === 'shipped'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-green-500 text-white'
+            }`}
+          >
+            {t(`statusList.${order.status}`)}
+          </span>
+        </span>
+      </div>
       {order.items.map((item) => (
         <div
           key={item.id}
@@ -58,7 +76,9 @@ export default async function OrderPage({ params }: Props) {
       ))}
 
       <div className='flex flex-wrap justify-between items-center font-semibold text-lg py-2'>
-        <span>Total: ${order.total.toFixed(2)}</span>
+        <span>
+          {t('total')}: ${order.total.toFixed(2)}
+        </span>
 
         <OrderActions
           orderId={order.id}

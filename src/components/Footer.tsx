@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { LanguageSwitcher } from './LanguageSwitcher'
 
 export default function Footer() {
   const currentYear = 2026
@@ -55,6 +56,7 @@ export default function Footer() {
               Support
             </a>
           </div>
+          <LanguageSwitcher className='hidden lg:flex' />
         </div>
       </div>
     </footer>

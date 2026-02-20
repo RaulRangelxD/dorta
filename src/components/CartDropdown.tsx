@@ -6,6 +6,7 @@ import { Banknote, Minus, Package, Plus, ShoppingCart, X } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 const CartDropdown = () => {
   const { cart, addProduct, removeProduct, clearCart, createOrder } = useCart()
@@ -13,6 +14,7 @@ const CartDropdown = () => {
   const [incId, setIncId] = useState<number | null>(null)
   const [decId, setDecId] = useState<number | null>(null)
   const router = useRouter()
+  const t = useTranslations('Cart')
 
   const totalItems = cart?.products.reduce((acc, p) => acc + p.quantity, 0) || 0
 
@@ -131,7 +133,8 @@ const CartDropdown = () => {
                       </motion.button>
                     </div>
                     <p className='text-sm text-gray-500 dark:text-gray-400 mt-1'>
-                      ${item.product.price.toFixed(2)} p/u × {item.quantity} = $
+                      ${item.product.price.toFixed(2)} {t('p/u')} ×{' '}
+                      {item.quantity} = $
                       {(item.product.price * item.quantity).toFixed(2)}
                     </p>
                   </div>
@@ -149,7 +152,7 @@ const CartDropdown = () => {
               ))}
 
               <div className='pt-3 mt-2 flex justify-between items-center font-semibold'>
-                <span>Total:</span>
+                <span>{t('total')}:</span>
                 <span>${totalPrice.toFixed(2)}</span>
               </div>
 
@@ -200,7 +203,7 @@ const CartDropdown = () => {
               </div>
             </>
           ) : (
-            <p>Your cart is empty</p>
+            <p>{t('empty')}</p>
           )}
         </div>
       )}

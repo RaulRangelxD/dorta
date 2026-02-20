@@ -4,6 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { ArrowLeft, PackageSearch } from 'lucide-react'
 import { ProductList } from '@/components/products/ProductsList'
 import { useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface Category {
   id: number
@@ -15,6 +16,7 @@ export default function CategoryDetailPage() {
   const router = useRouter()
   const [category, setCategory] = useState<Category | null>(null)
   const [loading, setLoading] = useState(true)
+  const t = useTranslations('CategoryPage')
 
   useEffect(() => {
     async function fetchCategory() {
@@ -38,12 +40,12 @@ export default function CategoryDetailPage() {
     return (
       <div className='min-h-screen bg-[#020817] text-white flex flex-col items-center justify-center gap-4'>
         <PackageSearch size={64} className='text-slate-700' />
-        <p className='text-slate-400'>Category not found</p>
+        <p className='text-slate-400'>{t('notFound')}</p>
         <button
           onClick={() => router.push('/categories')}
           className='text-blue-500 hover:underline'
         >
-          Back to catalog
+          {t('back')}
         </button>
       </div>
     )
@@ -57,7 +59,7 @@ export default function CategoryDetailPage() {
         className='flex items-center gap-2 text-slate-500 hover:text-white mb-8'
       >
         <ArrowLeft size={18} />
-        <span className='text-sm font-medium'>Back to Categories</span>
+        <span className='text-sm font-medium'>{t('back')}</span>
       </button>
 
       {/* HEADER */}

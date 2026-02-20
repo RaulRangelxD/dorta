@@ -3,9 +3,11 @@
 import Image from 'next/image'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 export default function DontPermissionsPage() {
   const router = useRouter()
+  const t = useTranslations('DontPermissions')
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -24,9 +26,7 @@ export default function DontPermissionsPage() {
         width={400}
         height={400}
       />
-      <p className='mt-4 text-slate-200 text-lg text-center'>
-        You don&apos;t have permissions to access this page. Redirecting...
-      </p>
+      <p className='mt-4 text-slate-200 text-lg text-center'>{t('message')}</p>
     </div>
   )
 }

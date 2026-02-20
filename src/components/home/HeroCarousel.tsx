@@ -3,43 +3,43 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-
-const slides = [
-  {
-    id: 1,
-    video: '/videos/hero-dorta.mp4',
-    title: 'Your home in',
-    subtitle: 'perfect balance',
-  },
-  {
-    id: 2,
-    video: '/videos/hero-dorta2.mp4',
-    title: 'Everything you need',
-    subtitle: 'is right here',
-  },
-  {
-    id: 3,
-    video: '/videos/hero-dorta3.mp4',
-    title: 'Live with',
-    subtitle: 'total peace of mind',
-  },
-]
+import { useTranslations } from 'next-intl'
 
 export function HeroCarousel() {
   const [index, setIndex] = useState(0)
+
+  const t = useTranslations('Hero')
+
+  const slides = [
+    {
+      title: t('slide1Title'),
+      subtitle: t('slide1Subtitle'),
+      video: '/videos/hero-dorta.mp4',
+    },
+    {
+      title: t('slide2Title'),
+      subtitle: t('slide2Subtitle'),
+      video: '/videos/hero-dorta2.mp4',
+    },
+    {
+      title: t('slide3Title'),
+      subtitle: t('slide3Subtitle'),
+      video: '/videos/hero-dorta3.mp4',
+    },
+  ]
 
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % slides.length)
     }, 6000)
     return () => clearInterval(timer)
-  }, [])
+  }, [slides.length])
 
   return (
     <section className='relative h-150 w-full overflow-hidden rounded-3xl bg-slate-950 mb-12 shadow-2xl border border-white/5'>
       <AnimatePresence mode='wait'>
         <motion.div
-          key={slides[index].id}
+          key={slides[index].title}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
